@@ -1,0 +1,260 @@
+<%- include('../adminPartials/header') %>
+<style>
+    .btn.btn-primary {
+        padding: 10px 20px ;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-md-8 offset-md-2">
+
+        <section class="content-main">
+          <!-- Your existing content here -->
+        </section>
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Products List</h2>
+                <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div>
+                
+                <a href="/addProduct" class="btn btn-primary btn-sm rounded">Add new product</a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col col-check flex-grow-0">
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="checkbox" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6">
+                        <input type="date" value="02.05.2021" class="form-control">
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <select class="form-select">
+                            <option selected>Status</option>
+                            <option>Active</option>
+                            <option>Disabled</option>
+                            <option>Show all</option>
+                        </select>
+                    </div>
+                </div>
+            </header> <!-- card-header end// -->
+            <div class="card-body">
+    
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Parent Category</th>
+                            <th>Product Image1</th>
+                            <th>Product Image2</th>
+                            <th>Product Image3</th>
+                            <th>Price in INR</th>
+                            <th>In stock</th>
+                            <th>Product Description</th>
+                            <th>List/Unlist</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% productData.reverse().forEach(function(product, index) { %>
+                            <tr>
+                                <td>
+                                    <%= product.productName %>
+                                </td>
+                                <td>
+                                    <%= product.parentCategory %>
+                                </td>
+                                <td><img src="/images/<%= product.productImage1 %>" alt=""
+                                        style="width: 100px; height: 100px"></td>
+                                <td><img src="/images/<%= product.productImage2 %>" alt=""
+                                        style="width: 100px; height: 100px"></td>
+                                <td><img src="/images/<%= product.productImage3 %>" alt=""
+                                        style="width: 100px; height: 100px"></td>
+                                <td>₹<%= product.productPrice %>
+                                </td>
+                                <td>
+                                    <%= product.productStock %>
+                                </td>
+                                
+
+
+                                <% if (product.isListed) { %>
+                                    <td>
+                                        <!-- <form action="/productsList/unList/" method="POST"> -->
+                                            <button type="submit" onclick="unlistProduct('<%= product._id%>')" class="btn btn-success">Unlist</button>
+                                        </form>
+                                    </td>
+                                    <% } else { %>
+                                        <td>
+                                            <!-- <form action="/productsList/list/" method="POST"> -->
+                                                <button type="submit" onclick="listProduct('<%= product._id%>')" class="btn btn-danger">List</button>
+                                            </form>
+                                        </td>
+                                    <% } %>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                            <div class="dropdown-menu">
+                                                <a href="/editProduct/<%= product._id %>" class="dropdown-item" href="#">Edit info</a>
+                                                <a class="dropdown-item text-danger"
+                                                onclick="return deleteConfirmation('<%= product.categoryName %>', '<%= product._id %>')"
+                                                href="#">Delete</a>
+                                            </div>
+                                            <script>
+                                                function deleteConfirmation(categoryName, productId) {
+                                                    if (confirm(`Are you sure you want to delete ${categoryName} product?`)) {
+                                                        window.location.href = `/deleteProduct/${productId}`;
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                }
+                                            </script>
+                                        </div> <!-- dropdown //end -->
+                                    </td>
+                            </tr>
+                       <%  }) %>      
+                    </tbody>
+                </table>
+    
+   
+            </div> <!-- card-body end// -->
+    
+    
+        </div> <!-- card end// -->       
+    </section> <!-- content-main end// -->
+      </div>
+    </div>
+  </div>
+<nav aria-label="...">
+    <ul class="pagination pagination-sm" style="justify-content: center ; padding-left: 15em;">
+      <% for (let index = 0; index < count; index++) { %>
+        <li class="page-item"><a class="page-link" href="productsList?page=<%= index+1 %>"><%= index+1 %></a></li>
+      <% } %>
+    </ul>
+</nav>
+
+<section class="content-main">
+
+    
+    
+<%- include('../adminPartials/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+async function unlistProduct(id){
+    try {
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, unlist it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+        }).then(async (result) => {
+        if (result.isConfirmed) {
+            const data =await fetch(`/productsList/unList/${id}`,{
+                method:"post",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            })
+
+            const value=await data.json();
+
+            if(value.success){
+
+            await swalWithBootstrapButtons.fire({
+            title: "Unlisted!",
+            text: "Product has been unlisted.",
+            icon: "success"
+            });
+            window.location.reload();
+
+            }
+
+            
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Failed to unlist the product :)",
+            icon: "error"
+            });
+        }
+});
+    } catch (error) {
+        console.error(`error in the function  product unlist \n ${error}`);
+    }
+}
+
+async function listProduct(id){
+    try {
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, list it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+        }).then(async (result) => {
+        if (result.isConfirmed) {
+            const data= await fetch(`/productsList/list/${id}`,{
+                method:"post",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            })
+            const value=await data.json();
+
+            if(value.success){
+             await swalWithBootstrapButtons.fire({
+            title: "Listed!",
+            text: "Product has been listed.",
+            icon: "success"
+            });
+            window.location.reload();
+            }
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Failed to list the product :(",
+            icon: "error"
+            });
+        }
+        });
+    } catch (error) {
+        console.error(`error in the function product list \n ${error}`);
+    }
+}
+
+</script>
+
+
+

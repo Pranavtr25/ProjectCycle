@@ -1,0 +1,294 @@
+
+<%- include('../adminPartials/header') %>
+
+
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or delete a category</p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form action="/addCategory" method="post" id="addCategoryValidation">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <% if (categoryExists) { %>
+                                        <p class="error">Category already exists</p>
+                                    <% } %>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" name="categoryName"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="categoryDescription" style="white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;"></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Create category</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>List/Unlist</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% categoryData.forEach(category => { %>
+                                            
+
+                                        <tr>
+                                            <td><%= category.categoryName %></td>
+                                            <td>
+                                                <div style="white-space: nowrap;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;">
+                                                <%= category.categoryDescription %>
+                                                </div>
+                                            </td>
+
+                                                
+                                            <td>
+                                                <% if(category.isListed){ %>
+                                                    <!-- <form action="/adminCategory/unList/" method="post"> -->
+                                                        <button type="submit" onclick="unlistCategory('<%= category._id %>')" class="btn btn-success">Unlist</button>
+                                                    <!-- </form> -->
+                                                <% } else {%>
+                                                    <!-- <form action="/adminCategory/list/<%= category._id %>" method="post"> -->
+                                                        <button type="submit" onclick="listCategory('<%= category._id %>')" class="btn btn-danger">List</button>
+                                                    <!-- </form> -->
+                                                <% } %>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                                    <div class="dropdown-menu">
+                                                        <a href="/editCategory/edit/<%= category._id %>" class="dropdown-item" href="#">Edit info</a>
+                                                        <a href="/adminCategory/delete/<%= category._id %>" onclick="return confirm('Are you sure you want to delete <%= category.categoryName %> category?')" class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
+                                                </div> <!-- dropdown //end -->
+                                            </td>
+                                        </tr>
+
+
+                                        <% }); %>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" style="justify-content: center ; padding-left: 15em;">
+                  <% for (let index = 0; index < count; index++) { %>
+                    <li class="page-item"><a class="page-link" href="/adminCategory?page=<%= index+1 %>"><%= index+1 %></a></li>
+                  <% } %>
+                </ul>
+            </nav>
+        </section> <!-- content-main end// -->
+        
+    </main>
+    
+
+    <%- include('../adminPartials/footer') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+
+    <script>
+
+        $("#addCategoryValidation").validate({
+            rules:{
+                categoryName:{
+                    required:true
+                },
+                categoryDescription:{
+                    required:true
+                }
+            }
+        })
+
+
+
+
+
+    async function unlistCategory(id){
+        try {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, unlist it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true
+                }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const data =await fetch(`/adminCategory/unList/${id}`,{
+                        method:"post",
+                        headers:{
+                            "Content-Type":"application/json"
+                        }
+                    })
+
+                    const value=await data.json();
+
+                    if(value.success){
+
+                    await swalWithBootstrapButtons.fire({
+                    title: "Unlisted!",
+                    text: "Category has been unlisted.",
+                    icon: "success"
+                    });
+                    window.location.reload();
+
+                    }
+
+                    
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Failed to unlist the category :)",
+                    icon: "error"
+                    });
+                }
+            });
+        } catch (error) {
+            console.error(`error in the function unlistcategory \n ${error}`);
+        }
+    }
+
+
+
+    async function listCategory(id){
+        try {
+            const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, list it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+        }).then(async (result) => {
+        if (result.isConfirmed) {
+            const data= await fetch(`/adminCategory/list/${id}`,{
+                method:"post",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            })
+            const value=await data.json();
+
+            if(value.success){
+             await swalWithBootstrapButtons.fire({
+            title: "Listed!",
+            text: "Category has been listed.",
+            icon: "success"
+            });
+            window.location.reload();
+            }
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Failed to list the category :(",
+            icon: "error"
+            });
+        }
+        });
+        } catch (error) {
+            console.error(`error in the function listcategory \n ${error}`);
+        }
+    }
+        
+
+    </script>

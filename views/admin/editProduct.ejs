@@ -1,0 +1,280 @@
+<%- include('../adminPartials/header') %>
+
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="container mt-5">
+                <h2 class="text-center">Edit Product</h2>
+
+                <form action="/editProductData/<%=productData._id%>" method="POST" enctype="multipart/form-data" id="editProductValidation">
+                    <!-- Your form content here -->
+
+                    <div class="col-md-6 offset-md-3 text-center">
+                        <!-- Center the form within a medium-sized column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="productName">Product Name</label>
+                                    <% if (productAlreadyExists) { %>
+                                        <p class="error">Product already exists</p>
+                                    <% } %>
+                                    <input type="text" class="form-control" id="productName"
+                                        value="<%= productData.productName %>" name="productName" />
+                                </div>
+                                <%= console.log(productData.productName); %>
+
+                                    <div class="input-group mb-3">
+                                        <img src="/images/<%= productData.productImage1 %>" alt="image 1" id="preview1"
+                                            style="width: 100px; height: 100px" />
+                                        <div class="input-group mb-3">
+                                            <input name="productImage1" id="productImage1" type="file"
+                                                class="form-control" placeholder="Product Image1"
+                                                onchange="displayImage1(event)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <img src="/images/<%= productData.productImage2 %>" alt="image 2" id="preview2"
+                                            style="width: 100px; height: 100px" />
+                                        <div class="input-group mb-3">
+                                            <input name="productImage2" id="productImage2" type="file"
+                                                class="form-control" placeholder="Product Image2"
+                                                onchange="displayImage2(event)" />
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <img src="/images/<%= productData.productImage3 %>" alt="image 3" id="preview3"
+                                            style="width: 100px; height: 100px" id="preview1" />
+                                        <div class="input-group mb-3">
+                                            <input name="productImage3" type="file" class="form-control"
+                                                onchange="displayImage3(event)" />
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <label for="productPrice">Product Price : &nbsp; &nbsp; &nbsp;</label>
+                                        <input name="productPrice" type="text" class="form-control"
+                                            value="<%= productData.productPrice %>" />
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <label for="productStock">Product stock : &nbsp; &nbsp; &nbsp;</label>
+                                        <input name="productStock" type="text" class="form-control"
+                                            value="<%= productData.productStock %>" />
+                                    </div>
+                                    <span>Select Parent Category</span>
+                                    <select name="parentCategory" class="form-select"
+                                        aria-label="Default select example">
+                                        <% categories.forEach(function(category) { %>
+                                            <option>
+                                                <%= category.categoryName %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                    <div class="input-group mb-3">
+                                        <label for="productStock">Product description : &nbsp; &nbsp; &nbsp;</label>
+                                        <input name="productDescription" type="text" class="form-control"
+                                            value="<%= productData.productDescription %>" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">
+                                            Save changes
+                                        </button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </section>
+        <!-- content-main end// -->
+    </main>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
+        integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+        integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <%- include('../adminPartials/footer') %>
+
+    <script>
+
+        $("#editProductValidation").validate({
+            rules:{
+                productName:{
+                    required:true,
+                    pattern:/^[a-zA-Z0-9]/
+                },
+                productImage1:{
+                    required:true
+                },
+                productImage2:{
+                    required:true
+                },
+                productImage3:{
+                    required:true
+                },
+                productPrice:{
+                    required:true,
+                    pattern:/^\d+(-\d+)*$/
+                },
+                productStock:{
+                    required:true,
+                    pattern:/^\d+(-\d+)*$/
+                },
+                productDescription:{
+                    required:true,
+                    pattern:/^[a-zA-Z0-9]/
+
+                }
+            }
+        })
+
+
+
+      function displayImage1(event) {
+        let image = document.getElementById("preview1");
+        let inputImg = document.getElementById("input-img1");
+        image.src = null;
+
+        const file = event.target.files[0];
+
+        if (file) {
+            image.src = URL.createObjectURL(file);
+
+            let cropper = new Cropper(image, {
+                aspectRatio: 5 / 4,
+                autoCrop: false,
+            });
+
+            document.getElementById("cropButton").addEventListener(
+                "click",
+                function () {
+                    const canvas = cropper.getCroppedCanvas();
+
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData(document.getElementById('editProductForm'));
+                        formData.append("productImage1", blob, "croppedImg.png");
+
+                        fetch("/editProduct", {
+                            method: "POST",
+                            body: formData,
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                window.location.href = "/products";
+                            } else {
+                                console.error("Upload failed:", data.error);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    });
+
+                    cropper.destroy();
+                }
+            );
+        }
+    }
+
+    function displayImage2(event) {
+        let image = document.getElementById("preview2");
+        let inputImg = document.getElementById("input-img2");
+        image.src = null;
+
+        const file = event.target.files[0];
+
+        if (file) {
+            image.src = URL.createObjectURL(file);
+
+            let cropper = new Cropper(image, {
+                aspectRatio: 5 / 4,
+                autoCrop: false,
+            });
+
+            document.getElementById("cropButton").addEventListener(
+                "click",
+                function () {
+                    const canvas = cropper.getCroppedCanvas();
+
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData(document.getElementById('editProductForm'));
+                        formData.append("productImage1", blob, "croppedImg.png");
+
+                        fetch("/editProduct", {
+                            method: "POST",
+                            body: formData,
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                window.location.href = "/products";
+                            } else {
+                                console.error("Upload failed:", data.error);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    });
+
+                    cropper.destroy();
+                }
+            );
+        }
+    }
+
+    function displayImage3(event) {
+        let image = document.getElementById("preview3");
+        let inputImg = document.getElementById("input-img3");
+        image.src = null;
+
+        const file = event.target.files[0];
+
+        if (file) {
+            image.src = URL.createObjectURL(file);
+
+            let cropper = new Cropper(image, {
+                aspectRatio: 5 / 4,
+                autoCrop: false,
+            });
+
+            document.getElementById("cropButton").addEventListener(
+                "click",
+                function () {
+                    const canvas = cropper.getCroppedCanvas();
+
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData(document.getElementById('editProductForm'));
+                        formData.append("productImage1", blob, "croppedImg.png");
+
+                        fetch("/editProduct", {
+                            method: "POST",
+                            body: formData,
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                window.location.href = "/products";
+                            } else {
+                                console.error("Upload failed:", data.error);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    });
+
+                    cropper.destroy();
+                }
+            );
+        }
+    }
+    </script>
+

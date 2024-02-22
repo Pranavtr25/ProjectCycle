@@ -1,0 +1,190 @@
+<%- include('../adminPartials/header') %>
+
+  <style>
+    .col-9{
+        width: 90%;
+    padding-left: 25%;
+    }
+  </style>
+<div class="row">
+    <div class="col-9">
+        <div class="content-header">
+            <h2 class="content-title">USER MANAGEMENT</h2>
+            
+        </div>
+    </div>
+    <table id="example" class="display" style="width:100%; margin-left: 65px" >
+        
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <% userData.reverse().forEach(user => { %>
+            
+        
+        <tr>
+            <td>
+               <%= user.userName %>
+            </td>
+            <td>
+                <%= user.email %>
+            </td>
+            <td>
+                <%= user.phoneNumber %>
+            </td>
+            <% if (user.block) { %>
+                <td>                   
+                    <!-- <form action="/userManagement/unBlock/" id="unBlockConfirmation"  method="POST"> -->
+
+                        <button type="submit" onclick="unblockBtn('<%= user._id %>')" class="btn btn-danger">Unblock</button>
+                    <!-- </form> -->
+                </td>
+            <% } else{ %>
+                <td>
+                    <!-- <form action="/userManagement/block/" id="blockConfirmation" method="post"> -->
+                        <button type="submit" onclick="blockBtn('<%= user._id%>')" class="btn btn-success">Block</button>
+                    <!-- </form> -->
+                </td>
+            <% } %>
+            
+        </tr>
+    <% }) %>
+    </tbody>
+    </table>
+    
+</div>
+
+
+<nav aria-label="...">
+    <ul class="pagination pagination-sm" style="justify-content: center ; padding-left: 15em;">
+      <% for (let index = 0; index < count; index++) { %>
+        <li class="page-item"><a class="page-link" href="/userManagement?page=<%= index+1 %>"><%= index+1 %></a></li>
+      <% } %>
+    </ul>
+</nav>
+
+
+
+
+
+ <%- include('../adminPartials/footer') %>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ <script>
+
+
+    async function unblockBtn(id){
+
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, unblock!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+        }).then(async (result) => {
+            
+        if (result.isConfirmed) {
+
+            const data=await fetch(`/userManagement/unBlock/${id}`,{
+                method:"post",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            })
+            const value=await data.json()
+
+            if(value.success){
+             await swalWithBootstrapButtons.fire({
+                title: "Unblocked!",
+                text: "User has been unblocked.",
+                icon: "success"
+                });
+                window.location.reload();
+            }
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Failed to unblock user :(",
+            icon: "error"
+            });
+        }
+        });
+
+    }
+
+
+    async function blockBtn(id){
+        const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+    title: "Are you sure?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, block!",
+    cancelButtonText: "No, cancel!",
+    reverseButtons: true
+    }).then(async(result) => {
+    if (result.isConfirmed) {
+        const data=await fetch(`/userManagement/block/${id}`,{
+            method:"post",
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+
+        const value=await data.json();
+
+        if(value.success){
+      await swalWithBootstrapButtons.fire({
+        title: "Blocked!",
+        text: "User has been blocked.",
+        icon: "success"
+        });
+        window.location.reload();
+        }
+        
+    } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+    ) {
+        swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: "Failed to block user :)",
+        icon: "error"
+        });
+    }
+    });
+    }
+
+
+
+ </script>
+
+ 
+ 

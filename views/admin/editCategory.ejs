@@ -1,0 +1,68 @@
+<%- include('../adminPartials/header') %>
+
+
+<main class="main-wrap">
+       
+    <section class="content-main">
+
+        <div class="card mb-4">
+
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <title>Edit Category</title>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        </head>
+
+        <body>
+            <div class="container mt-5">
+                <h2>Edit Category</h2>
+                <form action="/saveEditCategory/<%= categoryData._id %>" method="post" class="mt-4" id="editCategoryValidation">
+                    <div class="form-group">
+                        <label for="categoriesName">Category Name</label>
+                        <% if (categoryAlreadyExists) { %>
+                            <p class="error">Category already exists</p>
+                        <% } %>
+                        <input type="text" class="form-control" id="categoriesName" value="<%= categoryData.categoryName %>" name="categoriesName" required>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="categoriesDescription">Category Description</label>
+                        <textarea class="form-control" id="categoriesDescription" rows="3" name="categoriesDescription"><%= categoryData.categoryDescription %></textarea>
+                    </div>
+            
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+            
+
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </body>
+
+        </html>
+    </section> <!-- content-main end// -->
+    
+</main>
+
+<%- include('../adminPartials/footer') %>
+
+<script>
+
+    $("#editCategoryValidation").validate({
+        rules:{
+            categoriesName:{
+                required:true,
+                pattern:/^[a-zA-Z0-9]/
+            }
+            ,categoriesDescription:{
+                required:true,
+                pattern:/^[a-zA-Z0-9]/
+            }
+        }
+    })
+
+</script>
