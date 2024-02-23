@@ -53,7 +53,6 @@ const getSignupPage = async (req, res) => {
       res.redirect("/")
     }else{
       req.session.emailExist;
-
       res.render("user/signup", { emailExist: req.session.emailExist,isBlock:req.session.isBlock});
     }
     req.session.emailExist = false;

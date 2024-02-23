@@ -74,6 +74,11 @@
                                         <input name="productDescription" type="text" class="form-control"
                                             value="<%= productData.productDescription %>" />
                                     </div>
+                                    <div class="input-group mb-3">
+                                        <label for="productStock">Product highlights : &nbsp; &nbsp; &nbsp;</label>
+                                        <input name="productHighlight" type="text" class="form-control"
+                                            value="<%= productData.productHighlight %>" />
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-success">
                                             Save changes
@@ -130,6 +135,10 @@
                     required:true,
                     pattern:/^[a-zA-Z0-9]/
 
+                },
+                productHighlight:{
+                    required:true,
+                    pattern:/^[a-zA-Z0-9]/
                 }
             }
         })

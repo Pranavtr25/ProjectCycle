@@ -66,7 +66,8 @@ const addProductData = async (req, res) => {
             productImage3: req.files[2].filename,
             productPrice: req.body.productPrice,
             productStock: req.body.productStock,
-            productDescription:req.body.productDescription
+            productDescription:req.body.productDescription,
+            productHighlight:req.body.productHighlight
           },
         ]);
         res.redirect("/productsList");
@@ -115,7 +116,8 @@ const editProductData=async (req,res)=>{
             parentCategory: req.body.parentCategory,
             productPrice: req.body.productPrice,
             productStock: req.body.productStock,
-            productDescription:req.body.productDescription
+            productDescription:req.body.productDescription,
+            productHighlight:req.body.productHighlight
           },
         };
   

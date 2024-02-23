@@ -167,6 +167,16 @@
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- row.// -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>6. Highlights</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <input type="text" placeholder="" name="productHighlight" class="form-control">
+                                        </div>
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Close
@@ -222,6 +232,10 @@
                     pattern:/^\d+(-\d+)*$/
                 },
                 productDescription:{
+                    required:true,
+                    pattern:/^[a-zA-Z0-9]/
+                },
+                productHighlight:{
                     required:true,
                     pattern:/^[a-zA-Z0-9]/
                 }

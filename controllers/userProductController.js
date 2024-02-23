@@ -23,8 +23,12 @@ const getSingleProduct= async (req,res)=>{
     try {
         const id=req.params.id
         const productData=await productModel.findById({_id:id})
+        const parentCategory=productData.parentCategory
+        // console.log(parentCategory)
+        const relatedProductData=await productModel.find({parentCategory:parentCategory})
+        console.log(relatedProductData)
         userData=req.session.userData
-        res.render("user/singleProduct",{productData,userData});
+        res.render("user/singleProduct",{productData,userData,relatedProductData});
     } catch (error) {
         console.error(`error while getting the single product page \n ${error}`);
     }

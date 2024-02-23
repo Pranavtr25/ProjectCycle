@@ -16,7 +16,6 @@ const isUserBlock=async (req,res,next)=>{
 
         console.log('req reched isUserBlock ')
         if(req.session?.userData?.block){
-
             res.redirect("/signup")
         }else{
             next();

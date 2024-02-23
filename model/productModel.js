@@ -37,6 +37,10 @@ const productSchema= new mongoose.Schema({
     productDescription:{
         type:String,
         required:true
+    },
+    productHighlight:{
+        type:String,
+        required:true
     }
 })
 
