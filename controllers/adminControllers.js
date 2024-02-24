@@ -1,5 +1,7 @@
 const userModel = require("../model/userModel");
 
+const very = ('wofhu9wfiewjfiowejiofwejiofjweoifjiowe')
+
 const getAdminLogin = async (req, res) => {
   console.log("Admin");
   if (req.session.admin) {
