@@ -28,19 +28,20 @@ const loginVerification = async (req, res) => {
   try {
     let email = req.body.email;
     let password = req.body.password;
-    console.log(email);
-    console.log(password);
     let userData = await usermodel.findOne({email:email})
-    console.log(userData)
+    req.session.userData=userData;
+
     if(userData){
       const passCompare = await bcrypt.compare(password,userData.password)
       if(passCompare){
-        console.log("compare successfull")
-        req.session.userData=userData;
         res.status(200).send({success:true})
+      }else{
+        req.session.invalidLoginDetails=true;
+        res.status(500).send({success:false})
       }
     }else{
-      res.status(200).send({success:false})
+      req.session.invalidLoginDetails=true;
+      res.status(500).send({success:false})
     }
   } catch (error) {
     console.log(`error while login verification \n ${error}`);
@@ -53,9 +54,18 @@ const getSignupPage = async (req, res) => {
       res.redirect("/")
     }else{
       req.session.emailExist;
-      res.render("user/signup", { emailExist: req.session.emailExist,isBlock:req.session.isBlock});
+      req.session.invalidLoginDetails;
+      req.session.userData;
+      res.render("user/signup", {
+         emailExist: req.session.emailExist,
+         isBlock:req.session.isBlock,
+         invalidLoginDetails:req.session.invalidLoginDetails,
+         userData:req.session.userData
+        });
+        
     }
     req.session.emailExist = false;
+    req.session.invalidLoginDetails=false;
     req.session.save();
   } catch (err) {
     console.log(`err from registerPage\n ${err}`);
@@ -79,10 +89,7 @@ const getSignupData = async (req, res) => {
         email: req.body.email,
         password: pass,
       };
-      // console.log(req.body.email);
       const OTP = await emailOTPGenerate(req.body.email);
-      // console.log(`otp value ${OTP}`);
-
       req.session.otp = OTP;
       req.session.userData = userData;
       req.session.getOTPPage=true;
@@ -190,9 +197,10 @@ const getForgotPassword=async (req,res)=>{
 
 const getForgotPasswordOTP=async (req,res)=>{
   try {
+    console.log(req.session.otp);
     req.session.invalidForgotOTP;
     req.session.save();
-    res.render("user/forgotPasswordOTP",{invalidForgotOTP:req.session.invalidForgotOTP})
+    res.render("user/forgotPasswordOTP",{invalidForgotOTP:req.session.invalidForgotOTP,genOTP:req.session.otp})
     req.session.invalidForgotOTP=null;
     req.session.save();
   } catch (error) {
@@ -210,12 +218,10 @@ const getChangePassword= (req,res)=>{
 
 const isEmailExist=async (req,res)=>{
   try {
-    console.log('reached isemail exist router')
         console.log(req.params.id)
         const existEmail = req.params.id
         const userData = await usermodel.findOne({email:existEmail})
 
-        // console.log(`userData ${userData}`)
       if(userData){
         req.session.userData = userData
         const forgotOTP=await emailOTPGenerate(existEmail)

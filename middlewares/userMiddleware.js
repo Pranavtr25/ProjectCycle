@@ -13,9 +13,9 @@ const isUserActive=async (req,res,next)=>{
 
 const isUserBlock=async (req,res,next)=>{
     try {
-
-        console.log('req reched isUserBlock ')
-        if(req.session?.userData?.block){
+        const blocked = req.session?.userData
+        if(blocked?.block){
+            req.session.userData = null
             res.redirect("/signup")
         }else{
             next();
@@ -24,6 +24,9 @@ const isUserBlock=async (req,res,next)=>{
         console.error(`error while checking user is block \n ${error}`);
     }
 }
+
+
+
 
 module.exports={
     isUserActive,

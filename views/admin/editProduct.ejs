@@ -51,13 +51,13 @@
                                     </div>
                                     <div class="input-group mb-3">
                                         <label for="productPrice">Product Price : &nbsp; &nbsp; &nbsp;</label>
-                                        <input name="productPrice" type="text" class="form-control"
+                                        <input name="productPrice" type="number" class="form-control"
                                             value="<%= productData.productPrice %>" />
                                     </div>
 
                                     <div class="input-group mb-3">
                                         <label for="productStock">Product stock : &nbsp; &nbsp; &nbsp;</label>
-                                        <input name="productStock" type="text" class="form-control"
+                                        <input name="productStock" type="number" class="form-control"
                                             value="<%= productData.productStock %>" />
                                     </div>
                                     <span>Select Parent Category</span>
@@ -113,15 +113,6 @@
                 productName:{
                     required:true,
                     pattern:/^[a-zA-Z0-9]/
-                },
-                productImage1:{
-                    required:true
-                },
-                productImage2:{
-                    required:true
-                },
-                productImage3:{
-                    required:true
                 },
                 productPrice:{
                     required:true,

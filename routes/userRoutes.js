@@ -30,9 +30,9 @@ const {
     getSingleProduct
 }=require("../controllers/userProductController")
 
-router.get("/",getLandingPage)
+router.get("/",isUserBlock,getLandingPage)
 
-router.get("/signup",getSignupPage)
+router.get("/signup",isUserBlock,getSignupPage)
 
 router.post("/signupData",getSignupData)
 
