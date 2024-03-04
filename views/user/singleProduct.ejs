@@ -72,18 +72,28 @@
                                     </div><!-- End .product-price -->
                                     <% if (productData.productStock===0) { %>
                                         <div class="product-price" style="color: red;">
+                                            <span  id="productStock">
                                             Out of Stock !
+                                        </span>
                                         </div><!-- End .product-price -->
                                     <% } else if(productData.productStock<=5){ %>
                                         <div class="product-price" style="color: red;">
-                                            Stocks left : <%= productData.productStock %>
+                                            Stocks left : 
+                                            <span  id="productStock">
+                                                <%= productData.productStock %>
+                                            </span>
                                         </div><!-- End .product-price -->
                                     <% } else { %>
                                         <div class="product-price">
-                                            Stocks left : <%= productData.productStock %>
+                                            Stocks left :
+                                            <span  id="productStock">
+                                                <%= productData.productStock %>
+                                            </span>
                                         </div><!-- End .product-price -->
                                         <% } %>
-                                                                
+
+                                        <%= console.log("ghdshsbdb") %>                        
+                                        <%= console.log(productData) %>                        
 
                                     <!-- <div class="product-content">
                                         <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero.</p>
@@ -105,7 +115,7 @@
                                     <div class="product-details-action">
                                         <div class="details-action-col">
                                             
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            <button onclick="addToCart('<%=productData._id%>')" class="btn-product btn-cart"><span>add to cart</span></button>
                                         </div><!-- End .details-action-col -->
 
                                         <div class="details-action-wrapper">
@@ -587,6 +597,7 @@
                                                     <i class="icon-facebook-f"></i>
                                                     Login With Facebook
                                                 </a>
+                                                
                                             </div><!-- End .col-6 -->
                                         </div><!-- End .row -->
                                     </div><!-- End .form-choice -->
@@ -614,6 +625,44 @@
     <script src="assets/js/main.js"></script>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    let productQuantity=Number("<%=productQuantity%>")
+    const productStock=Number(document.getElementById("productStock").textContent.trim())
+    async function addToCart(id){
+
+            console.log(productStock)
+            if(productQuantity<productStock){
+                const data = await fetch(`/cart/${id}`,{
+                                    method:"POST",
+                                    headers:{
+                                        "Content-Type":"application/json"
+                                    }
+                    })   
+                const dataRes = await data.json()
+    
+                if(dataRes.success)
+                {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Item Added to Cart',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            }else{
+                Swal.fire({
+                title: "sorry",
+                text: "maximum limit exceeded",
+                icon: "error",
+                showCancelButton: true
+                })
+            }
+    
+            
+    }
+</script>
 
 <!-- molla/product-centered.html  22 Nov 2019 10:03:20 GMT -->
 </html>

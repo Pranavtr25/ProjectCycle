@@ -30,6 +30,21 @@ const {
     getSingleProduct
 }=require("../controllers/userProductController")
 
+
+const {
+    getCart,
+    addToCart,
+    deleteFromCart,
+    incQty,
+    decQty
+}=require("../controllers/cartController")
+
+
+const {
+    getProfile,
+    getAddAddress
+} = require("../controllers/profileController")
+
 router.get("/",isUserBlock,getLandingPage)
 
 router.get("/signup",isUserBlock,getSignupPage)
@@ -62,7 +77,8 @@ router.get("/userLogout",userLogout)
 
 
 
-// -----------------------------------------------------------
+
+// -----------------------------------------------------------products
 
 router.get("/userProducts",isUserBlock,isUserActive,getUserProduct)
 
@@ -72,6 +88,33 @@ router.get("/singleProduct:id",isUserBlock,isUserActive,getSingleProduct)
 
 
 
+// -------------------------------------------cart---------------------------
+
+
+router.get("/cart",isUserBlock,isUserActive,getCart)
+
+router.post("/cart/:id",isUserBlock,isUserActive,addToCart)
+
+router.delete("/cart/delete/:id",isUserBlock,isUserActive,deleteFromCart)
+
+router.put("/cart/increment",isUserBlock,isUserActive,incQty);
+
+router.put("/cart/decrement",isUserBlock,isUserActive,decQty);
+
+
+// ----------------------------------------------------profile----------------------------------------------------
+
+router.get("/profile",isUserBlock,isUserActive,getProfile)
+
+router.get("/addAddress",isUserBlock,isUserActive,getAddAddress)
+
+
+
+
+
+
+
+// -------------------------------------------------------------------------------------------------------------------
 router.get("*/",getErrorPage)
 
 module.exports=router

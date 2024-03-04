@@ -29,14 +29,20 @@ const loginVerification = async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     let userData = await usermodel.findOne({email:email})
+    console.log(userData)
     req.session.userData=userData;
 
     if(userData){
       const passCompare = await bcrypt.compare(password,userData.password)
+      console.log(passCompare)
       if(passCompare){
+        console.log("anything...")
         res.status(200).send({success:true})
       }else{
+        console.log("this is elseee")
+        req.session.userData = false;
         req.session.invalidLoginDetails=true;
+        req.session.save();
         res.status(500).send({success:false})
       }
     }else{
