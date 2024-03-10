@@ -14,17 +14,17 @@ const addressSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  houseNo: {
-    type: String,
-    required: true,
-  },
-  city: {
+  houseNumber: {
     type: String,
     required: true,
   },
   state: {
     type: String,
     requied: true,
+  },
+  city: {
+    type: String,
+    required: true,
   },
   pincode: {
     type: Number,
@@ -34,4 +34,4 @@ const addressSchema = new mongoose.Schema({
 
 const AddressModel = mongoose.model("addresscollections", addressSchema);
 
-module.exports = { AddressModel, addressSchema };
+module.exports =  AddressModel;

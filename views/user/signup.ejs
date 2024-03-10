@@ -760,7 +760,7 @@
         userName: {
           required: true,
           minlength: 2,
-          pattern:/^[a-zA-Z]+$/
+          pattern:/^[a-zA-Z]+( [a-zA-Z]+)*$/
         },
         phoneNumber: {
           required: true,
@@ -821,8 +821,7 @@
       rules: {
         email: {
           required: true,
-          email: true,
-          pattern:/^[a-zA-Z0-9]/
+          email: true
         },
         password: {
           required: true,

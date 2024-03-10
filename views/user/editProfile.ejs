@@ -7,22 +7,52 @@
 
         <div class="container profile-container">
             <hr>
-            <h1 class="text-center">Profile</h1>
-            <hr>
-            <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
-                <div class="btn btn-light active"><a href="#">Profile</a></div>
-                <div><a href="/profileChangePassword">Change Password</a></div>
-                <div><a href="/addAddress">Add address</a></div>
-                <div><a href="/myAddress">My address</a></div>
-                <div><a href="">All orders</a></div>
-            </div>
+            <h1 class="text-center">Edit Profile</h1>
             <hr>
     
-            <div class="user-details" style="display: flex; flex-direction: column; text-align: center; justify-content: center;">
-                <h2><%= userData.userName %></h2>
-                <p><strong>Mobile No :</strong> <%= userData.phoneNumber %></p>
-                <p><strong>Email:</strong> <%= userData.email %></p>
-            </div>
+            <form id="editProfileValidation" style="padding-left: 20rem; padding-right: 20rem;">
+                <div class="form-group">
+                  <label for="register-username">Name *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="userName"
+                    value="<%= userData.userName %>"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-number">Phone Number *</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="phoneNumber"
+                    value="<%= userData.phoneNumber %>"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-number">Email *</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    value="<%=userData.email%>"
+                    required
+                    readonly
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                    <a href="/profile">
+                        <div class="btn btn-danger">Cancel</div>
+                    </a>
+                </div>
+                
+            </form>
     
             <hr>
     
@@ -56,13 +86,10 @@
                     </div>
                 </div>
             </div> -->
-        
-            <div class="text-center">
-                <a href="/editProfile" class="btn btn-outline-primary-2">
-                    <span>Edit</span>
-                    <i class="icon-long-arrow-right"></i>
-                </a>
-            </div>
+    
+            <hr>
+    
+            
         </div>
 
 
@@ -461,5 +488,85 @@
 </body>
 
 <!-- molla/404.html  22 Nov 2019 10:04:04 GMT -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+<script>
+
+    $(editProfileValidation).validate({
+        rules:{
+            userName:{
+                required:true,
+                minlength:2,
+                pattern:/^[a-zA-Z]+( [a-zA-Z]+)*$/
+            },
+            phoneNumber:{
+                required:true,
+                minlength:10,
+                maxlength:10,
+                pattern:/^\d+(-\d+)*$/
+            },
+            email:{
+                required:true,
+                email:true
+            }
+        },
+        submitHandler:async function(editProfileValidation,e){
+            e.preventDefault();
+            const data={
+                userName:editProfileValidation.userName.value,
+                phoneNumber:editProfileValidation.phoneNumber.value,
+                email:editProfileValidation.email.value
+            }
+            try {
+                const response=await fetch("/editProfileData",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(data)
+                })
+
+                const value=await response.json();
+
+                if(value.success && !value.generateOTP){
+                    await Swal.fire({
+                                        icon: 'success',
+                                        title: 'Profile Successfully Updated',
+                                        showConfirmButton: false,
+                                        timer:4000
+                                    })
+                                    window.location.href="/profile"
+                }else if(value.success && value.generateOTP){
+                    await  Swal.fire({
+                                        icon: 'success',
+                                        title: 'OTP sent',
+                                        showConfirmButton: false,
+                                        timer:4000
+                                    })
+                                    window.location.href="/profileOTP"
+                }
+
+            } catch (error) {
+                console.error(`error while fetching the edit profile details \n ${error}`);
+            }
+        }
+    })
+
+</script>
 
 </html>

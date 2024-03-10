@@ -1,28 +1,61 @@
 <%- include('../userPartials/header') %>
 
+<style>
 
+    #userAddressValue{
+        display: ruby-text; 
+        flex-direction: row; 
+        flex-wrap: wrap;
+        text-align: center; 
+        justify-content: space-evenly;
+    }
+
+    .addressItems{
+        width: 30em;
+        border: 1px solid #ebebeb;
+        padding: 40px 0px
+    }
+
+    .addressItems:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+</style>
 
 
 
 
         <div class="container profile-container">
             <hr>
-            <h1 class="text-center">Profile</h1>
+            <h1 class="text-center">My address</h1>
             <hr>
             <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
-                <div class="btn btn-light active"><a href="#">Profile</a></div>
+                <div><a href="/profile">Profile</a></div>
                 <div><a href="/profileChangePassword">Change Password</a></div>
                 <div><a href="/addAddress">Add address</a></div>
-                <div><a href="/myAddress">My address</a></div>
+                <div class="btn btn-light active"><a href="/myAddress">My address</a></div>
                 <div><a href="">All orders</a></div>
             </div>
             <hr>
-    
-            <div class="user-details" style="display: flex; flex-direction: column; text-align: center; justify-content: center;">
-                <h2><%= userData.userName %></h2>
-                <p><strong>Mobile No :</strong> <%= userData.phoneNumber %></p>
-                <p><strong>Email:</strong> <%= userData.email %></p>
+
+            <div class="user-details" id="userAddressValue">
+                <% addressData.forEach(data => { %>
+                    <div class="addressItems">
+                        <h2><%= data.name %></h2>
+                        <p><strong>Mobile No :</strong> <%= data.phoneNumber %></p>
+                        <p><strong>House Number :</strong> <%= data.houseNumber %></p>
+                        <p><strong>City :</strong> <%= data.city %></p>
+                        <p><strong>State :</strong> <%= data.state %></p>
+                        <p><strong>Pincode :</strong> <%= data.pincode %></p>
+                        <hr>
+                        <button class="btn btn-outline-primary-2" onclick="editAddressData('<%= data._id %>')">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                
+                <% }); %>
             </div>
+    
+            
     
             <hr>
     
@@ -56,13 +89,7 @@
                     </div>
                 </div>
             </div> -->
-        
-            <div class="text-center">
-                <a href="/editProfile" class="btn btn-outline-primary-2">
-                    <span>Edit</span>
-                    <i class="icon-long-arrow-right"></i>
-                </a>
-            </div>
+    
         </div>
 
 

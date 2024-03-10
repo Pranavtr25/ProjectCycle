@@ -94,9 +94,7 @@ const getEditCategory = async (req, res) => {
 };
 
 const editCategory = async (req, res) => {
-  // console.log(req.params.id);
-  // console.log(req.body.categoriesName);
-  // console.log(req.body.categoriesDescription);
+ 
   try {
     let existingCategory = await categoryModel.findOne({
       categoryName: { $regex: new RegExp(`^${req.body.categoriesName}$`) },

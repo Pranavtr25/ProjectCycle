@@ -159,5 +159,6 @@ module.exports = {
   addToCart,
   deleteFromCart,
   decQty,
-  incQty
+  incQty,
+  grandTotal
 };

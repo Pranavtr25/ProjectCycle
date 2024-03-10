@@ -42,8 +42,23 @@ const {
 
 const {
     getProfile,
-    getAddAddress
+    getAddAddress,
+    addAddressData,
+    getMyAddress,
+    getEditProfile,
+    editProfileData,
+    getProfileOTP,
+    profileOTPVerification,
+    getProfileChangePassword,
+    profileChangePasswordData
 } = require("../controllers/profileController")
+
+
+const {
+    getCheckout
+}=require("../controllers/checkoutController")
+
+// ----------------------------------------------------------------------------------------------------------------
 
 router.get("/",isUserBlock,getLandingPage)
 
@@ -108,8 +123,26 @@ router.get("/profile",isUserBlock,isUserActive,getProfile)
 
 router.get("/addAddress",isUserBlock,isUserActive,getAddAddress)
 
+router.post("/addAddressData",isUserBlock,isUserActive,addAddressData)
+
+router.get("/myAddress",isUserBlock,isUserActive,getMyAddress)
+
+router.get("/editProfile",isUserBlock,isUserActive,getEditProfile)
+
+router.post("/editProfileData",isUserBlock,isUserActive,editProfileData)
+
+router.get("/profileOTP",isUserBlock,isUserActive,getProfileOTP)
+
+router.post("/profileOTPData:id",isUserBlock,isUserActive,profileOTPVerification)
+
+router.get("/profileChangePassword",isUserBlock,isUserActive,getProfileChangePassword)
+
+router.patch("/profileChangePasswordData",isUserBlock,isUserActive,profileChangePasswordData)
 
 
+// -----------------------------------------------------------checkout-----------------------------------------------
+
+router.get("/checkout",isUserBlock,isUserActive,getCheckout)
 
 
 

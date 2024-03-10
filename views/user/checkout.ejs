@@ -1,160 +1,232 @@
 <%- include('../userPartials/header') %>
 
 
-
-
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         		<div class="container">
-        			<h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        			<h1 class="page-title">Checkout<span>Shop</span></h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/userProducts">Products</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
             <div class="page-content">
-            	<div class="cart">
+            	<div class="checkout">
 	                <div class="container">
-	                	<div class="row">
-	                		<div class="col-lg-9">
-	                			<table class="table table-cart table-mobile" style="text-align: center;">
-									<thead>
-										<tr>
-											<th>Product</th>
-											<th>Price</th>
-											<th>Quantity</th>
-											<th>Total</th>
-										</tr>
-									</thead>
+            			<div class="checkout-discount">
+            				<form action="#">
+        						<input type="text" class="form-control" required id="checkout-discount-input">
+            					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+            				</form>
+
+            			</div><!-- End .checkout-discount -->
+
+                        <hr>
+                        <div class="onepage-checkout col-lg-12">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                  <p class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                      href="#BillingInformation" aria-expanded="true"
+                                      aria-controls="BillingInformation">
+                                      <button type="button" class="btn btn-primary">Choose Address</button>
+
+                                    </a>
+                                  </p>
+                                </div>
+                                <div id="BillingInformation" class="panel-collapse collapse in" role="tabpanel"
+                                  aria-labelledby="BillingInformation" style="float: left; width: 50%;">
+                                  <div class="panel-body">
+                                    <div style="clear: both"></div>
+                                    <!-- Address Choosing Section -->
+                                    <div class="form-group required maxwidth300">
+                                      <label for="SelectAddress">Select Address <sup>*</sup></label>
+                                      <select class="form-control" required aria-required="true" id="SelectAddress"
+                                        name="chosenAddress">
+                                          <option value="">
+                                          </option>
+                                      </select>
+                                      <br>
+                                      <a class="btn" id="editAddressButton" role="button">Edit Address</a>
+                                    </div>
+                                    <!-- <script>
+                                      document.getElementById('editAddressButton').addEventListener('click', function () {
+                                        var selectedAddressId = document.getElementById('SelectAddress').value;
+                                        window.location.href = "/profile/" + selectedAddressId;
+                                      });
+                                    </script> -->
+                                    <!-- End of Address Choosing Section -->
+                                    <!-- Other Checkout Sections -->
+                                    <!-- Add your other checkout sections here -->
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                            <!--onepage-checkout-->
+                          </div>
+
+
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          
+                          <hr>
+
+
+                            <div class="summary" style="padding: 5em 10em;">
+                                <div>
+                                    <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                    <table class="table table-summary">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% checkoutData.forEach(data => { %>
+                                            <tr>
+                                                <td><a href="#"><%= data.productId.productName %></a></td>
+                                                <td><%= data.totalCostPerProduct %></td>
+                                            </tr> 
+                                        <% }); %>
                                         
 
-									<tbody>
-                                        <% userCartData.forEach(function(data, index) { %>
-										<tr>
-											<td class="product-col">
-												<div class="product" style="justify-content: space-evenly;">
-													<figure class="product-media">
-														<a href="#" >
-															<img src="../../images/<%= data.productId.productImage1 %>" alt="Product image">
-														</a>
-													</figure>
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td><%= grandTotalCheckout %></td>
+                                        </tr><!-- End .summary-subtotal -->
+                                        <tr>
+                                            <td>Shipping:</td>
+                                            <td>Free shipping</td>
+                                        </tr>
+                                        <tr class="summary-total">
+                                            <td>Total:</td>
+                                            <td><%= grandTotalCheckout %></td>
+                                        </tr><!-- End .summary-total -->
+                                    </tbody>
+                                    </table><!-- End .table table-summary -->
 
-													<h3 class="product-title">
-														<a href="#"><%= data.productId.productName %></a>
-													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
-											</td>
-                                            <input type="hidden" id="productId" value="<%=data.productId._id%>">
-											<td class="price-col" id="price<%=data._id%>">₹<%= data.productId.productPrice %></td>
-											<td class="cart__update-wrapper cart-flex-item text-right">
-                                                <div class="cart__qty text-center">
-                                                    <div class="qtyField">
-                                                        <button onclick="decrement('<%= data._id %>')">
-                                                            <i class="icon icon-minus"></i>
-                                                        </button>
-                                                        &nbsp;
-                                                        <span id="<%= data._id %>" ><%= data.productQuantity %></span>
-                                                        &nbsp;
-                                                        <button onclick="increment('<%= data._id %>','<%= data.productId.productStock %>')">
-                                                            <i class="icon icon-plus"></i>
-                                                        </button>
-                                                        <!-- <input class="cart__qty-input qty" type="text" name="updates[]" id="qty" value="1" pattern="[0-9]*"> -->
-                                                    </div>
-                                                </div>
-                                            </td>
-											<td class="total-col" id="total<%=data._id%>">₹<%= data.totalCostPerProduct %></td>
-											<td class="remove-col"><button onclick="deleteCartProduct('<%= data._id %>','<%= index %>')" class="btn-remove"><i class="icon-close"></i></button></td>
-										</tr>
-										
-									</tbody>
+                                <div class="accordion-summary" id="accordion-payment">
+                                    <!-- <div class="card"> -->
+                                        <!-- <div class="card-header" id="heading-1">
+                                            <h2 class="card-title">
+                                                <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                                    Direct bank transfer
+                                                </a>
+                                            </h2>
+                                        </div> -->
+                                        <!-- End .card-header -->
+                                        <!-- <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment"> -->
+                                            <!-- <div class="card-body">
+                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
+                                            </div> -->
+                                            <!-- End .card-body -->
+                                        <!-- </div> -->
+                                        <!-- End .collapse -->
+                                    <!-- </div --><!-- End .card -->
 
-                                    <% }); %>
+                                    <!-- <div class="card"> -->
+                                        <!-- <div class="card-header" id="heading-2">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                                                    Check payments
+                                                </a>
+                                            </h2>
+                                        </div> -->
+                                        <!-- End .card-header -->
+                                        <!-- <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment"> -->
+                                            <!-- <div class="card-body">
+                                                Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. 
+                                            </div> -->
+                                            <!-- End .card-body -->
+                                        <!-- </div> -->
+                                        <!-- End .collapse -->
+                                    <!-- </div> -->
+                                    <!-- End .card -->
 
-								</table><!-- End .table table-wishlist -->
+                                    <div class="card">
+                                        <div class="card-header" id="heading-3">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                                                    Cash on delivery
+                                                </a>
+                                            </h2>
+                                        </div><!-- End .card-header -->
+                                        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+                                            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .card -->
 
-	                			<div class="cart-bottom">
-			            			<div class="cart-discount">
-			            				<form action="#">
-			            					<div class="input-group">
-				        						<input type="text" class="form-control" required placeholder="coupon code">
-				        						<div class="input-group-append">
-													<button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
-												</div><!-- .End .input-group-append -->
-			        						</div><!-- End .input-group -->
-			            				</form>
-			            			</div><!-- End .cart-discount -->
+                                    <!-- <div class="card"> -->
+                                        <!-- <div class="card-header" id="heading-4">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+                                                    PayPal <small class="float-right paypal-link">What is PayPal?</small>
+                                                </a>
+                                            </h2>
+                                        </div> -->
+                                        <!-- End .card-header -->
+                                        <!-- <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
+                                            <div class="card-body">
+                                                Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
+                                            </div> -->
+                                            <!-- End .card-body -->
+                                        <!-- </div> -->
+                                        <!-- End .collapse -->
+                                    <!-- </div> -->
+                                    <!-- End .card -->
 
-			            			<a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
-		            			</div><!-- End .cart-bottom -->
-	                		</div><!-- End .col-lg-9 -->
-	                		<aside class="col-lg-3">
-	                			<div class="summary summary-cart">
-	                				<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+                                    <!-- <div class="card">
+                                        <div class="card-header" id="heading-5">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+                                                    Credit Card (Stripe)
+                                                    <img src="assets/images/payments-summary.png" alt="payments cards">
+                                                </a>
+                                            </h2> -->
+                                        <!-- </div> -->
+                                        <!-- End .card-header -->
+                                        <!-- <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
+                                            <div class="card-body"> Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
+                                            </div> -->
+                                            <!-- End .card-body -->
+                                        <!-- </div> -->
+                                        <!-- End .collapse -->
+                                    <!-- </div> -->
+                                    <!-- End .card -->
+                                <!-- </div> -->
+                                <!-- End .accordion -->
 
-	                				<table class="table table-summary">
-	                					<tbody>
-	                						<!-- <tr class="summary-subtotal">
-	                							<td>Subtotal:</td>
-	                							<td>₹</td>
-	                						</tr> -->
-                                            <!-- End .summary-subtotal -->
-	                						<tr class="summary-shipping">
-	                							<td>Shipping:</td>
-	                							<td>&nbsp;</td>
-	                						</tr>
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <span class="btn-text">Place Order</span>
+                                    <span class="btn-hover-text">Place Order</span>
+                                </button>
+                                </div>
+                                
+                            </div><!-- End .summary -->
 
-	                						<tr class="summary-shipping-row">
-	                							<td>
-													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>$0.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<!-- <tr class="summary-shipping-estimate">
-	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-	                							<td>&nbsp;</td>
-	                						</tr> -->
-                                            <!-- End .summary-shipping-estimate -->
-
-	                						<tr class="summary-total">
-	                							<td>Total:</td>
-	                							<td id="grandTotal">₹<%= grandTotal %></td>
-	                						</tr><!-- End .summary-total -->
-	                					</tbody>
-	                				</table><!-- End .table table-summary -->
-                                    <%if(userCartData.length){ %>
-                                        <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
-                                    <% } %>
-	                			</div><!-- End .summary -->
-
-		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
-	                		</aside><!-- End .col-lg-3 -->
-	                	</div><!-- End .row -->
 	                </div><!-- End .container -->
-                </div><!-- End .cart -->
+                </div><!-- End .checkout -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-
-
-
-
         <%- include('../userPartials/footer') %>
-
-
-        
-
-
 
 
     </div><!-- End .page-wrapper -->
@@ -453,158 +525,10 @@
     <script src="assets/js/jquery.waypoints.min.js"></script>
     <script src="assets/js/superfish.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
-    <!-- <script src="assets/js/bootstrap-input-spinner.js"></script> -->
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 </body>
 
 
-<!-- molla/cart.html  22 Nov 2019 09:55:06 GMT -->
+<!-- molla/checkout.html  22 Nov 2019 09:55:06 GMT -->
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    async function decrement(id){
-        let productId = document.getElementById("productId").value
-        let price = document.getElementById(`price${id}`).textContent
-        let cartDecrease = document.getElementById(`${id}`).textContent
-        let spanValue = document.getElementById(`${id}`)
-        let totalCostPerProductValue = document.getElementById(`total${id}`).textContent
-        let totalCostPerProduct= document.getElementById(`total${id}`)
-        let grandTotal = document.getElementById("grandTotal")
-
-        if(cartDecrease >1)
-        {
-            let cartId ={
-                _id : id,
-                productId : productId
-            }
-            console.log(cartId)
-            let data = await fetch("/cart/decrement",{
-
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(cartId)
-            })
-            const dataRes = await data.json()
-
-            console.log(dataRes)
-
-            spanValue.textContent = await dataRes.cartProduct.productQuantity
-            totalCostPerProduct.textContent = await dataRes.cartProduct.totalCostPerProductPerproduct
-            grandTotal.textContent = await dataRes.grandTotal
-            window.location.reload()
-        }else{
-            Swal.fire({
-                title: "sorry",
-                text: "minimum limit should be 1",
-                icon: "error",
-                showCancelButton: true
-            })
-        }
-    }
-
-  </script>
-
-  
-  <script>
-   async  function increment(id,productStock){
-
-    console.log(productStock)
-        let productId = document.getElementById("productId").value
-        let price = document.getElementById(`price${id}`).textContent
-        let cartIncrease = document.getElementById(`${id}`).textContent
-        let spanValue = document.getElementById(`${id}`)
-        let totalCostPerProductValue = document.getElementById(`total${id}`).textContent
-        let totalCostPerProduct= document.getElementById(`total${id}`)
-        let grandTotal = document.getElementById("grandTotal")
-
-        if(cartIncrease < Number(productStock))
-        {
-            let cartId ={
-                _id : id,
-                productId : productId
-            }
-            console.log(cartId)
-         
-            let data = await fetch("/cart/increment",{
-
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(cartId)
-            })
-            const dataRes = await data.json()
-
-            console.log(dataRes)
-
-            spanValue.textContent = await dataRes.cartProduct.productQuantity
-            totalCostPerProduct.textContent = await dataRes.cartProduct.totalCostPerProductPerproduct
-            grandTotal.textContent = await dataRes.grandTotal
-            window.location.reload()
-        }else{
-            Swal.fire({
-                title: "sorry",
-                text: "maximum limit exceeded",
-                icon: "error",
-                showCancelButton: true
-            })
-        }
-    }
-  </script>
-
-
-<script>
-    async function deleteCartProduct(id, index) {
-        const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-        confirmButton: "btn btn-danger",
-        cancelButton: "btn btn-success"
-    },
-    buttonsStyling: false
-    });
-    swalWithBootstrapButtons.fire({
-    title: "Are you sure?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete!",
-    cancelButtonText: "No, cancel!",
-    reverseButtons: false
-    }).then(async(result) => {
-    if (result.isConfirmed) {
-        const data=await fetch(`/cart/delete/${id}`,{
-            method:"DELETE",
-            headers:{
-                "Content-Type":"application/json"
-            }
-        })
-
-        const value=await data.json();
-
-        if(value.success){
-            await swalWithBootstrapButtons.fire({
-                title: "Deleted!",
-                text: "Cart product is deleted.",
-                icon: "success"
-            });
-            window.location.reload();       
-        
-        }
-        
-    } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-    ) {
-        swalWithBootstrapButtons.fire({
-        title: "Cancelled",
-        text: "Failed to delete the product from the cart :)",
-        icon: "error"
-        });
-    }
-    });
-    }
-</script>
