@@ -1,61 +1,112 @@
 <%- include('../userPartials/header') %>
 
-<style>
 
-    #userAddressValue{
-        display: ruby-text; 
-        flex-direction: row; 
-        flex-wrap: wrap;
-        text-align: center; 
-        justify-content: space-evenly;
-    }
-
-    .addressItems{
-        width: 30em;
-        border: 1px solid #ebebeb;
-        padding: 40px 0px
-    }
-
-    .addressItems:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-</style>
 
 
 
 
         <div class="container profile-container">
             <hr>
-            <h1 class="text-center">My address</h1>
+            <h1 class="text-center">Edit Address</h1>
             <hr>
-            <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
-                <div><a href="/profile">Profile</a></div>
-                <div><a href="/profileChangePassword">Change Password</a></div>
-                <div><a href="/addAddress">Add address</a></div>
-                <div class="btn btn-light active"><a href="/myAddress">My address</a></div>
-                <div><a href="">All orders</a></div>
-            </div>
-            <hr>
+           
+            <form id="editAddressValidation" style="padding-left: 20rem; padding-right: 20rem;">
 
-            <div class="user-details" id="userAddressValue">
-                <% addressData.reverse().forEach(data => { %>
-                    <div class="addressItems">
-                        <h2><%= data.name %></h2>
-                        <p><strong>Mobile No :</strong> <%= data.phoneNumber %></p>
-                        <p><strong>House Number :</strong> <%= data.houseNumber %></p>
-                        <p><strong>City :</strong> <%= data.city %></p>
-                        <p><strong>State :</strong> <%= data.state %></p>
-                        <p><strong>Pincode :</strong> <%= data.pincode %></p>
-                        <hr>
-                        <a href="/editAddress<%= data._id %>"><button class="btn btn-outline-primary-2">Edit</button></a>
-                        <button onclick="deleteAddress('<%=data._id%>')" class="btn btn-danger">Delete</button>
-                    </div>
-                
-                <% }); %>
-            </div>
-    
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="<%= addressData._id %>"
+                    name="id"
+                    required
+                    hidden
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-username">Name *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="<%= addressData.name %>"
+                    name="name"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-number">Phone Number *</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    value="<%= addressData.phoneNumber %>"
+                    name="phoneNumber"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-number">House No.</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="<%= addressData.houseNumber %>"
+                    name="houseNumber"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-email">City *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="<%= addressData.city %>"
+                    name="city"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-group">
+                  <label for="register-password">State *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="<%= addressData.state %>"
+                    name="state"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+                <div class="form-group">
+                  <label for="register-conform-password"
+                    >Pin Code *</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    value="<%= addressData.pincode %>"
+                    name="pincode"
+                    required
+                  />
+                </div>
+                <!-- End .form-group -->
+
+                <div class="text-center">
+                  <input
+                    type="submit"
+                    class="btn btn-outline-primary-2"
+                    value="Save"
+                  />
+                  <a href="/myAddress">
+                    <div class="btn btn-danger">Cancel</div>
+                  </a>
+                  <!-- End .custom-checkbox -->
+                </div>
             
+                <!-- End .form-footer -->
+            </form>
     
             <hr>
     
@@ -89,6 +140,8 @@
                     </div>
                 </div>
             </div> -->
+    
+            <hr>
     
         </div>
 
@@ -486,93 +539,96 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 </body>
-
-<!-- molla/404.html  22 Nov 2019 10:04:04 GMT -->
-
-<!-- <script>
-
-    async function editAddressData(id){
-        console.log(id)
-        try {
-            const data=await fetch(`/editAddressData${id}`,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        }
-    })
-        const value=data.json();
-        if(value.success){
-        
-        }else{
-        
-        }
-        } catch (error) {
-            console.error(`error while fetching the edit address data \n ${error}`);
-        }
-    }
-
-
-</script> -->
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
 <script>
 
-    async function deleteAddress(id){
+$(editAddressValidation).validate({
+    rules:{
+        name: {
+          required: true,
+          minlength: 2,
+          pattern:/^[a-zA-Z]+( [a-zA-Z]+)*$/
+        },
+        phoneNumber: {
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+        },
+        houseNumber: {
+          required: true,
+          pattern:"^\\d+/?\\d*[a-zA-Z]?(?<!/)$"
+        },
+        city: {
+          required: true,
+          pattern:/^[a-zA-Z0-9]/
+        },
+        state: {
+          required: true,
+        },
+        pincode:{
+            required:true,
+            minlength:6,
+            maxlength:6
+        }
+    },
+    submitHandler:async function(editAddressValidation,e){
+        e.preventDefault();
+        let data = {
+                id: editAddressValidation.id.value,
+                name: editAddressValidation.name.value,
+                phoneNumber: editAddressValidation.phoneNumber.value,
+                houseNumber: editAddressValidation.houseNumber.value,
+                city: editAddressValidation.city.value,
+                state: editAddressValidation.state.value,
+                pincode: editAddressValidation.pincode.value
+            };
         try {
-            const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: "btn btn-danger",
-                cancelButton: "btn btn-success"
+        const response=await fetch("/editAddressData",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
             },
-            buttonsStyling: false
-            });
-            swalWithBootstrapButtons.fire({
-            title: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, delete!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: false
-            }).then(async(result) => {
-            if (result.isConfirmed) {
-                const response=await fetch(`/deleteAddress${id}`,{
-                    method:"DELETE",
-                    headers:{
-                        "Content-Type":"application/json"
-                    }
-                })
-                const value=await response.json();
-
-            if(value.success){
-                await Swal.fire({
+            body:JSON.stringify(data)
+        })
+        const value=await response.json();
+        if(value.success){
+            await Swal.fire({
                         icon: 'success',
-                        title: 'Address has been deleted',
+                        title: 'Address updated',
                         showConfirmButton: false,
                         timer: 1500
                     });
-                window.location.href="/myAddress"           
-            }
-        
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                await Swal.fire({
-                        title: "sorry",
-                        text: "Something went wrong",
-                        icon: "error",
-                    })
-            }
-            });
-          
-        } catch (error) {
-            console.error(`error while fetching the data for delete address \n ${error}`);
+            window.location.href="/myAddress"
+        }else{
+            await Swal.fire({
+                title: "sorry",
+                text: "maximum limit exceeded",
+                icon: "error",
+                })
         }
+        } catch (error) {
+            console.error(`error while fetching the data from add address \n ${error}`);
+        }
+        
     }
+})
 
 </script>
 
+<!-- molla/404.html  22 Nov 2019 10:04:04 GMT -->
 
 </html>

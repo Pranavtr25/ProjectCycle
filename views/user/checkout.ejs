@@ -48,14 +48,18 @@
                                     <div style="clear: both"></div>
                                     <!-- Address Choosing Section -->
                                     <div class="form-group required maxwidth300">
+                                        <hr>
                                       <label for="SelectAddress">Select Address <sup>*</sup></label>
-                                      <select class="form-control" required aria-required="true" id="SelectAddress"
-                                        name="chosenAddress">
-                                          <option value="">
-                                          </option>
-                                      </select>
+                                        <select class="form-control" required aria-required="true" id="SelectAddress" name="chosenAddress">
+                                            <option selected disabled>select</option>
+                                            <% addressData.reverse().forEach(data => { %>
+                                                <option value="<%= data._id %>"><%= data.name %></option>
+                                            <% }); %>
+                                        </select>
+
                                       <br>
-                                      <a class="btn" id="editAddressButton" role="button">Edit Address</a>
+                                      
+                                      <a href="/addAddress"><button class="btn btn-outline-primary-2">Add Address</button></a>
                                     </div>
                                     <!-- <script>
                                       document.getElementById('editAddressButton').addEventListener('click', function () {
@@ -101,14 +105,14 @@
                                         <% checkoutData.forEach(data => { %>
                                             <tr>
                                                 <td><a href="#"><%= data.productId.productName %></a></td>
-                                                <td><%= data.totalCostPerProduct %></td>
+                                                <td>₹ <%= data.totalCostPerProduct %></td>
                                             </tr> 
                                         <% }); %>
                                         
 
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
-                                            <td><%= grandTotalCheckout %></td>
+                                            <td>₹ <%= grandTotalCheckout %></td>
                                         </tr><!-- End .summary-subtotal -->
                                         <tr>
                                             <td>Shipping:</td>
@@ -116,7 +120,7 @@
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td><%= grandTotalCheckout %></td>
+                                            <td>₹ <%= grandTotalCheckout %></td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                     </table><!-- End .table table-summary -->
@@ -161,11 +165,16 @@
 
                                     <div class="card">
                                         <div class="card-header" id="heading-3">
+                                            <br>
                                             <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                                                <!-- <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
                                                     Cash on delivery
-                                                </a>
+                                                </a> -->
+                                                <input type="radio" name="paymentType" class="paymentType" value="Cash on delivery">&nbsp; Cash on delivery <br> <br>
+                                                <input type="radio" name="paymentType" class="paymentType" value="razorPay">&nbsp; Razorpay <br> <br>
+                                                <input type="radio" name="paymentType" class="paymentType" value="Wallet">&nbsp; Wallet <br> <br>
                                             </h2>
+                                            <br>
                                         </div><!-- End .card-header -->
                                         <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
                                             <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
@@ -213,7 +222,7 @@
                                 <!-- </div> -->
                                 <!-- End .accordion -->
 
-                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                <button type="submit" onclick="placeOrderProducts('<%= grandTotalCheckout %>')" class="btn btn-outline-primary-2 btn-order btn-block">
                                     <span class="btn-text">Place Order</span>
                                     <span class="btn-hover-text">Place Order</span>
                                 </button>
@@ -528,6 +537,58 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+    async function placeOrderProducts(grandTotalCheckout){
+        
+        const paymentType = document.querySelector('input[name=paymentType]:checked')
+        
+        const paymentTypeValue = paymentType?.value ?? null
+         
+        selectAddress = document.querySelector('#SelectAddress');
+
+        selectAddressValue = selectAddress.value;
+
+        if(selectAddressValue==="select"){
+            return await Swal.fire({
+                title: "sorry",
+                text: "Select the address",
+                icon: "error",
+                })
+        }
+        if(paymentTypeValue){
+            const response=await fetch(`/`,{
+                    method:"DELETE",
+                    headers:{
+                        "Content-Type":"application/json"
+                    }
+                })
+            const value=await response.json();
+
+            if(value.success){
+                await Swal.fire({
+                        icon: 'success',
+                        title: 'Address has been deleted',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                window.location.href="/myAddress"           
+            }
+        }else{
+            return await Swal.fire({
+                title: "sorry",
+                text: "Select the payment type",
+                icon: "error",
+                })
+        }
+    
+    }
+
+</script>
 
 
 <!-- molla/checkout.html  22 Nov 2019 09:55:06 GMT -->

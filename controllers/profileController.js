@@ -82,6 +82,48 @@ const addAddressData = async (req,res)=>{
     }
 }
 
+const getEditAddress = async (req,res)=>{
+    try {
+        const addressId=req.params.id;
+        const addressData = await AddressModel.findById({_id:addressId})
+        console.log(addressData)
+        res.render("user/editAddress",{addressData})
+    } catch (error) {
+        console.error(`error while getting the edit address page \n ${error}`);
+    }
+}
+
+const editAddressData = async (req,res)=>{
+    try {
+        const {
+            id,
+            name,
+            phoneNumber,
+            houseNumber,
+            city,
+            state,
+            pincode
+        } = req.body;
+
+        await AddressModel.findByIdAndUpdate({_id:id},{$set:{name,phoneNumber,houseNumber,city,state,pincode}})
+        res.status(200).send({success:true})
+    } catch (error) {
+        console.error(`error while saving the edited address data \n ${error}`);
+        res.status(501).send({success:false})
+    }
+}
+
+const deleteAddress = async (req,res)=>{
+    try {
+        console.log("req.params in deleteaddress = "+req.params.id)
+        await AddressModel.findByIdAndDelete({_id:req.params.id})
+        res.status(200).send({success:true})
+    } catch (error) {
+        console.error(`error while deleting the address \n ${error}`);
+        res.status(501).send({success:false})
+    }
+}
+
 const getMyAddress=async (req,res)=>{
     try {
         const userData=req.session.userData
@@ -175,5 +217,8 @@ module.exports = {
     getProfileOTP,
     profileOTPVerification,
     getProfileChangePassword,
-    profileChangePasswordData
+    profileChangePasswordData,
+    getEditAddress,
+    editAddressData,
+    deleteAddress
 }

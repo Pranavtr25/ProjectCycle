@@ -538,6 +538,8 @@
     referrerpolicy="no-referrer"
 ></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 
 $(addAddressValidation).validate({
@@ -589,9 +591,19 @@ $(addAddressValidation).validate({
         })
         const value=await response.json();
         if(value.success){
-            window.location.reload()
+            await Swal.fire({
+                        icon: 'success',
+                        title: 'Address has been added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+            window.location.href="/myAddress"
         }else{
-            window.location.reload();
+            await Swal.fire({
+                        title: "sorry",
+                        text: "Something went wrong",
+                        icon: "error",
+                    })
         }
         } catch (error) {
             console.error(`error while fetching the data from add address \n ${error}`);

@@ -27,7 +27,11 @@ const {
 
 const {
     getUserProduct,
-    getSingleProduct
+    getSingleProduct,
+    productPriceRangeData,
+    categoryFilterData,
+    productSortData,
+    clearProductFilters
 }=require("../controllers/userProductController")
 
 
@@ -50,7 +54,10 @@ const {
     getProfileOTP,
     profileOTPVerification,
     getProfileChangePassword,
-    profileChangePasswordData
+    profileChangePasswordData,
+    getEditAddress,
+    editAddressData,
+    deleteAddress
 } = require("../controllers/profileController")
 
 
@@ -99,9 +106,13 @@ router.get("/userProducts",isUserBlock,isUserActive,getUserProduct)
 
 router.get("/singleProduct:id",isUserBlock,isUserActive,getSingleProduct)
 
+router.post("/productPriceRange",isUserBlock,isUserActive,productPriceRangeData)
 
+router.get("/categoryFilter:id",isUserBlock,isUserActive,categoryFilterData)
 
+router.post("/productSort",isUserBlock,isUserActive,productSortData)
 
+router.get("/clearFilters",isUserBlock,isUserActive,clearProductFilters)
 
 // -------------------------------------------cart---------------------------
 
@@ -127,9 +138,15 @@ router.post("/addAddressData",isUserBlock,isUserActive,addAddressData)
 
 router.get("/myAddress",isUserBlock,isUserActive,getMyAddress)
 
+router.get("/editAddress:id",isUserBlock,isUserActive,getEditAddress)
+
+router.post("/editAddressData",isUserBlock,isUserActive,editAddressData)
+
 router.get("/editProfile",isUserBlock,isUserActive,getEditProfile)
 
 router.post("/editProfileData",isUserBlock,isUserActive,editProfileData)
+
+router.delete("/deleteAddress:id",isUserBlock,isUserActive,deleteAddress)
 
 router.get("/profileOTP",isUserBlock,isUserActive,getProfileOTP)
 
