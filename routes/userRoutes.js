@@ -65,6 +65,17 @@ const {
     getCheckout
 }=require("../controllers/checkoutController")
 
+
+const {
+    orderData,
+    getOrderSuccess
+} = require("../controllers/orderManagementController")
+
+
+
+
+
+
 // ----------------------------------------------------------------------------------------------------------------
 
 router.get("/",isUserBlock,getLandingPage)
@@ -161,6 +172,12 @@ router.patch("/profileChangePasswordData",isUserBlock,isUserActive,profileChange
 
 router.get("/checkout",isUserBlock,isUserActive,getCheckout)
 
+
+// -----------------------------------------------------------order management---------------------------------------
+
+router.post("/orderData",isUserBlock,isUserActive,orderData)
+
+router.get("/orderSuccess",isUserBlock,isUserActive,getOrderSuccess)
 
 
 

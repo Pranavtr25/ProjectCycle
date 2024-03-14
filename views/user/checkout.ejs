@@ -549,9 +549,9 @@
         
         const paymentTypeValue = paymentType?.value ?? null
          
-        selectAddress = document.querySelector('#SelectAddress');
+        const selectAddress = document.querySelector('#SelectAddress');
 
-        selectAddressValue = selectAddress.value;
+        const selectAddressValue = selectAddress.value;
 
         if(selectAddressValue==="select"){
             return await Swal.fire({
@@ -561,22 +561,23 @@
                 })
         }
         if(paymentTypeValue){
-            const response=await fetch(`/`,{
-                    method:"DELETE",
+            let data={
+                grandTotalCheckout,
+                paymentTypeValue,
+                selectAddressValue
+            }
+            const response=await fetch(`/orderData`,{
+                    method:"POST",
                     headers:{
                         "Content-Type":"application/json"
-                    }
+                    },
+                    body:JSON.stringify(data)
                 })
             const value=await response.json();
 
             if(value.success){
-                await Swal.fire({
-                        icon: 'success',
-                        title: 'Address has been deleted',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                window.location.href="/myAddress"           
+                
+                window.location.href="/orderSuccess"           
             }
         }else{
             return await Swal.fire({

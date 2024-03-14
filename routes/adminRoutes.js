@@ -41,6 +41,12 @@ const {
 }=require("../controllers/adminProductControllers")
 
 
+const {
+    getOrderList,
+    getSingleOrderDetail
+} = require("../controllers/adminOrderController")
+
+
 
 
 router.get("/adminLogin",getAdminLogin)
@@ -92,5 +98,15 @@ router.get("/deleteProduct/:id",isAdminActive,deleteProduct)
 router.post("/productsList/unList/:id",unListProduct)
 
 router.post("/productsList/list/:id",listProduct)
+
+
+// ---------------------------------------------------orders---------------------------------------------
+
+router.get("/orderList",isAdminActive,getOrderList)
+
+router.get("/singleOrder:id",isAdminActive,getSingleOrderDetail)
+
+
+
 
 module.exports=router;
