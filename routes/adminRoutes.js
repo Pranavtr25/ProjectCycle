@@ -43,6 +43,7 @@ const {
 
 const {
     getOrderList,
+    updateOrderStatus,
     getSingleOrderDetail
 } = require("../controllers/adminOrderController")
 
@@ -103,6 +104,8 @@ router.post("/productsList/list/:id",listProduct)
 // ---------------------------------------------------orders---------------------------------------------
 
 router.get("/orderList",isAdminActive,getOrderList)
+
+router.get("/orderListStatus:id",isAdminActive,updateOrderStatus)
 
 router.get("/singleOrder:id",isAdminActive,getSingleOrderDetail)
 

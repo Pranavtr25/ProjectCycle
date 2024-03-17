@@ -50,8 +50,9 @@ const getUserProduct=async (req,res)=>{
             
             let totalCount=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE},parentCategory:req.session.categoryFilterName}).countDocuments();
             let count=totalCount/limit;
-
+            console.log("/////////////////////////////////////////////////////////////////////")
             console.log(productData)
+            console.log("/////////////////////////////////////////////////////////////////////")
             if(req.session.sortValue){
                 productData = await priceSortWithCategorisedFilter(req,productGTE,productLTE,skip,limit)
                 console.log("product dataaaaa: \n"+productData)

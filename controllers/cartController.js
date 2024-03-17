@@ -57,6 +57,7 @@ const addToCart = async (req, res) => {
     });
     // console.log("this is the existing product " , existingProduct)
     if (existingProduct) {
+      console.log("product is already been added")
         console.log(existingProduct);
       await cartModel.updateOne(
         { _id: existingProduct._id },

@@ -101,7 +101,8 @@
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date</th>
-                                    <th scope="col" class="text-end"> Action </th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,17 +116,20 @@
                                         <td><%= data.grandTotalCost %></td>
                                         <td><span class="badge rounded-pill alert-warning"><%= data.orderStatus %></span></td>
                                         <td><%= data.orderDate.toLocaleDateString() %></td>
-                                        <td class="text-end">
+                                        <td>
                                             <a href="/singleOrder<%= data.orderNumber %>" class="btn btn-md rounded font-sm">Detail</a>
-                                            <!-- <div class="dropdown">
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
                                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item" href="#">Edit info</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    <a class="dropdown-item" href="/orderListStatusP<%=data._id%>">Pending</a>
+                                                    <a class="dropdown-item" href="/orderListStatusS<%=data._id%>">Ship</a>
+                                                    <a class="dropdown-item" href="/orderListStatusD<%=data._id%>">Deliver</a>
+                                                    <a class="dropdown-item" href="/orderListStatusR<%=data._id%>">Return</a>
+                                                    <a class="dropdown-item text-danger" href="/orderListStatusC<%=data._id%>">Cancel</a>
                                                 </div>
-                                            </div> -->
-                                             <!-- dropdown //end -->
+                                            </div>
                                         </td>
                                     </tr>
 
@@ -138,13 +142,10 @@
             </div> <!-- card end// -->
             <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    <ul class="pagination justify-content-center">
+                        <% for (let index = 0; index < count; index++) { %>
+                            <li class="page-item "><a class="page-link" href="/orderList?page=<%= index+1 %>"><%= index+1 %></a></li>
+                        <% } %>
                     </ul>
                 </nav>
             </div>

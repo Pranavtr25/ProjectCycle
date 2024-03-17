@@ -57,7 +57,10 @@ const {
     profileChangePasswordData,
     getEditAddress,
     editAddressData,
-    deleteAddress
+    deleteAddress,
+    getuserOrders,
+    getUserSingleOrder,
+    cancelReturnOrder
 } = require("../controllers/profileController")
 
 
@@ -72,7 +75,9 @@ const {
 } = require("../controllers/orderManagementController")
 
 
-
+const {
+    getWishlist
+} = require("../controllers/wishlistControllers")
 
 
 
@@ -167,6 +172,12 @@ router.get("/profileChangePassword",isUserBlock,isUserActive,getProfileChangePas
 
 router.patch("/profileChangePasswordData",isUserBlock,isUserActive,profileChangePasswordData)
 
+router.get("/profile/userOrders",isUserBlock,isUserActive,getuserOrders)
+
+router.get("/profile/userSingleOrder:id",isUserBlock,isUserActive,getUserSingleOrder)
+
+router.get("/profile/cancelReturnOrder:id",isUserBlock,isUserActive,cancelReturnOrder)
+
 
 // -----------------------------------------------------------checkout-----------------------------------------------
 
@@ -178,6 +189,12 @@ router.get("/checkout",isUserBlock,isUserActive,getCheckout)
 router.post("/orderData",isUserBlock,isUserActive,orderData)
 
 router.get("/orderSuccess",isUserBlock,isUserActive,getOrderSuccess)
+
+
+// -------------------------------------------------------------wishlist----------------------------------------------
+
+
+router.get("/wishlist",isUserBlock,isUserActive,getWishlist)
 
 
 

@@ -2,11 +2,13 @@ const AddressModel = require("../model/addressModel")
 const userModel=require("../model/userModel")
 const {emailOTPGenerate}=require("../controllers/userControllers")
 const bcrypt = require("bcrypt");
+const orderModel = require("../model/orderModel");
+const productModel = require("../model/productModel");
 
 
 const getProfile = async (req,res)=>{
     try {
-        userData=await userModel.findById({_id:req.session.userData._id})
+        userData=await userModel.findById({_id:req.session?.userData?._id})
         res.render("user/profile",{userData})
     } catch (error) {
         console.error(`error while getting the profile page \n ${error}`);
@@ -207,6 +209,66 @@ const profileChangePasswordData = async (req,res)=>{
     }
 }
 
+
+const getuserOrders = async (req,res)=>{
+    try {
+        let count;
+        let limit=4;
+        let skip;
+        let orderData;
+        let page=Number(req.query.page) || 1
+        skip=(page-1)*limit
+        let totalCount=await orderModel.find().estimatedDocumentCount()
+        count=totalCount/limit;
+        orderData= await orderModel.find({userId:req.session?.userData?._id}).skip(skip).limit(limit)
+        console.log("............................................................................")
+        console.log(orderData)
+        console.log("............................................................................")
+        res.render("user/userOrdersList",{orderData,limit,count})
+    } catch (error) {
+        console.error(`error while getting the user order list \n ${error}`);
+    }
+}
+
+const getUserSingleOrder = async (req,res)=>{
+    try {
+        console.log(`user id: ${req.params.id}`)
+        const orderData = await orderModel.findById({_id:req.params.id}).populate("userId").populate("addressChosen")
+        console.log(`---------------------------------------`)
+        console.log(orderData)
+        console.log(`---------------------------------------`)
+        res.render("user/userSingleOrder",{orderData})
+    } catch (error) {
+        console.error(`error while getting the user single order page \n ${error}`);
+    }
+}
+
+const cancelReturnOrder = async (req,res)=>{
+    try {
+        console.log(req.params.id)
+        const id=req.params.id
+        const orderId = id.slice(1);
+        const statusCode = id[0]
+        const orderData = await orderModel.findById({_id:orderId})
+        console.log(`orderrrrrrrrrrrrrr: ${orderData}`)
+        console.log(orderId)
+        console.log(statusCode)
+        if(statusCode==="C"){
+            await orderModel.findOneAndUpdate({_id:orderId},{$set:{orderStatus:"Cancelled"}})
+        }else if(statusCode==="R"){
+            await orderModel.findOneAndUpdate({_id:orderId},{$set:{orderStatus:"Returned"}})
+        }
+
+        orderData.cartData.forEach(async data => {
+            await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:data.productQuantity}})
+        });
+
+        res.redirect("/profile/userOrders")
+    } catch (error) {
+        console.error(`error while cancelling / returning the order \n ${error}`);
+    }
+}
+
 module.exports = {
     getProfile,
     getAddAddress,
@@ -220,5 +282,8 @@ module.exports = {
     profileChangePasswordData,
     getEditAddress,
     editAddressData,
-    deleteAddress
+    deleteAddress,
+    getuserOrders,
+    getUserSingleOrder,
+    cancelReturnOrder
 }

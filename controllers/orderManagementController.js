@@ -1,17 +1,22 @@
 const cartModel = require("../model/cartModel");
 const categoryModel = require("../model/categoryModel");
 const productModel = require("../model/productModel");
-const orderModel =require("../model/orderModel")
+const orderModel =require("../model/orderModel");
+const { deleteMany } = require("../model/userModel");
 
 const orderData = async (req,res)=>{
     try {
         const cartValue= await cartModel.find({userId:req.session?.userData?._id}).populate("productId")
+        // console.log("-------------------------------------------------------cartdata-------------------------")
+        // console.log(cartValue)
+        // console.log("-------------------------------------------------------cartdata-------------------------")
+
         const{
             grandTotalCheckout,
             paymentTypeValue,
             selectAddressValue
         } = req.body
-        // console.log(req.body)
+
         const data ={
             userId:req.session?.userData?._id,
             orderNumber:await orderModel.find().estimatedDocumentCount()+1,
@@ -25,10 +30,27 @@ const orderData = async (req,res)=>{
 
         await orderModel(data).save();
 
+        console.log(`=====================`)
+        console.log(JSON.stringify(cartValue))
+        console.log(`=====================`)
+
+        const decProductData = JSON.stringify(cartValue)
+
+       await cartValue.forEach(async data=>{
+            await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:-data.productQuantity}})
+        })
+        // console.log(`deccccccc : ${decProductArr}`)
+
+        // cartModel.forEach(data=>{
+        //     console.log(data.productQuantity , data.productId)
+        // })
+
+        await cartModel.deleteMany({userId:req.session?.userData?._id});
+
         res.status(200).send({success:true})
 
     } catch (error) {
-        console.error(`error while saving the error data \n ${error}`);
+        console.error(`error while saving the order data \n ${error}`);
         res.status(501).send({success:false})
     }
 }
@@ -47,6 +69,9 @@ const getOrderSuccess = async (req,res)=>{
         console.error(`error while getting the getting the order success page \n ${error}`);
     }
 }
+
+
+
 
 
 module.exports={

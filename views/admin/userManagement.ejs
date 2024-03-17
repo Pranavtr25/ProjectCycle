@@ -62,13 +62,15 @@
 </div>
 
 
-<nav aria-label="...">
-    <ul class="pagination pagination-sm" style="justify-content: center ; padding-left: 15em;">
-      <% for (let index = 0; index < count; index++) { %>
-        <li class="page-item"><a class="page-link" href="/userManagement?page=<%= index+1 %>"><%= index+1 %></a></li>
-      <% } %>
-    </ul>
-</nav>
+<div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <% for (let index = 0; index < count; index++) { %>
+                <li class="page-item "><a class="page-link" href="/userManagement?page=<%= index+1 %>"><%= index+1 %></a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
 
 
 

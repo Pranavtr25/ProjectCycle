@@ -22,33 +22,67 @@
                                 </div>
                                 <%= console.log(productData.productName); %>
 
-                                    <div class="input-group mb-3">
-                                        <img src="/images/<%= productData.productImage1 %>" alt="image 1" id="preview1"
-                                            style="width: 100px; height: 100px" />
-                                        <div class="input-group mb-3">
-                                            <input name="productImage1" id="productImage1" type="file"
-                                                class="form-control" placeholder="Product Image1"
-                                                onchange="displayImage1(event)" />
+                                   
+                                    <div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <img src="/images/<%= productData.productImage1 %>" alt="image 1" id="preview1" style="width: 100px; height: 100px; margin-right: 10px;" />
+                                                    <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(1, this)">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
+                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage1(event)" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="input-group mb-3">
-                                        <img src="/images/<%= productData.productImage2 %>" alt="image 2" id="preview2"
-                                            style="width: 100px; height: 100px" />
-                                        <div class="input-group mb-3">
-                                            <input name="productImage2" id="productImage2" type="file"
-                                                class="form-control" placeholder="Product Image2"
-                                                onchange="displayImage2(event)" />
+                                    
+                                    
+                                    <div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <img src="/images/<%= productData.productImage2 %>" alt="image 1" id="preview1" style="width: 100px; height: 100px; margin-right: 10px;" />
+                                                    <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(2, this)">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
+                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage2(event)" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="input-group mb-3">
-                                        <img src="/images/<%= productData.productImage3 %>" alt="image 3" id="preview3"
-                                            style="width: 100px; height: 100px" id="preview1" />
-                                        <div class="input-group mb-3">
-                                            <input name="productImage3" type="file" class="form-control"
-                                                onchange="displayImage3(event)" />
+                                    
+                                    
+                                    <div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <img src="/images/<%= productData.productImage3 %>" alt="image 1" id="preview1" style="width: 100px; height: 100px; margin-right: 10px;" />
+                                                    <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(3, this)">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
+                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage3(event)" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    
+                            
                                     <div class="input-group mb-3">
                                         <label for="productPrice">Product Price : &nbsp; &nbsp; &nbsp;</label>
                                         <input name="productPrice" type="number" class="form-control"
@@ -108,6 +142,13 @@
 
     <script>
 
+       // Function to delete image and hide delete button
+       function deleteImage(imageNumber, button) {
+            $("#preview" + imageNumber).hide();
+            $(button).hide();
+        }
+ 
+
         $("#editProductValidation").validate({
             rules:{
                 productName:{
@@ -136,144 +177,42 @@
 
 
 
-      function displayImage1(event) {
-        let image = document.getElementById("preview1");
-        let inputImg = document.getElementById("input-img1");
-        image.src = null;
-
-        const file = event.target.files[0];
-
+        function displayImage1() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview1").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview1").show(); // Show the preview image
+            $("#deleteButton1").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage1").files[0];
         if (file) {
-            image.src = URL.createObjectURL(file);
-
-            let cropper = new Cropper(image, {
-                aspectRatio: 5 / 4,
-                autoCrop: false,
-            });
-
-            document.getElementById("cropButton").addEventListener(
-                "click",
-                function () {
-                    const canvas = cropper.getCroppedCanvas();
-
-                    canvas.toBlob(function (blob) {
-                        const formData = new FormData(document.getElementById('editProductForm'));
-                        formData.append("productImage1", blob, "croppedImg.png");
-
-                        fetch("/editProduct", {
-                            method: "POST",
-                            body: formData,
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                window.location.href = "/products";
-                            } else {
-                                console.error("Upload failed:", data.error);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                        });
-                    });
-
-                    cropper.destroy();
-                }
-            );
+            reader.readAsDataURL(file);
         }
     }
 
-    function displayImage2(event) {
-        let image = document.getElementById("preview2");
-        let inputImg = document.getElementById("input-img2");
-        image.src = null;
-
-        const file = event.target.files[0];
-
+    function displayImage2() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview2").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview2").show(); // Show the preview image
+            $("#deleteButton2").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage2").files[0];
         if (file) {
-            image.src = URL.createObjectURL(file);
-
-            let cropper = new Cropper(image, {
-                aspectRatio: 5 / 4,
-                autoCrop: false,
-            });
-
-            document.getElementById("cropButton").addEventListener(
-                "click",
-                function () {
-                    const canvas = cropper.getCroppedCanvas();
-
-                    canvas.toBlob(function (blob) {
-                        const formData = new FormData(document.getElementById('editProductForm'));
-                        formData.append("productImage1", blob, "croppedImg.png");
-
-                        fetch("/editProduct", {
-                            method: "POST",
-                            body: formData,
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                window.location.href = "/products";
-                            } else {
-                                console.error("Upload failed:", data.error);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                        });
-                    });
-
-                    cropper.destroy();
-                }
-            );
+            reader.readAsDataURL(file);
         }
     }
 
-    function displayImage3(event) {
-        let image = document.getElementById("preview3");
-        let inputImg = document.getElementById("input-img3");
-        image.src = null;
-
-        const file = event.target.files[0];
-
+    function displayImage3() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview3").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview3").show(); // Show the preview image
+            $("#deleteButton3").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage3").files[0];
         if (file) {
-            image.src = URL.createObjectURL(file);
-
-            let cropper = new Cropper(image, {
-                aspectRatio: 5 / 4,
-                autoCrop: false,
-            });
-
-            document.getElementById("cropButton").addEventListener(
-                "click",
-                function () {
-                    const canvas = cropper.getCroppedCanvas();
-
-                    canvas.toBlob(function (blob) {
-                        const formData = new FormData(document.getElementById('editProductForm'));
-                        formData.append("productImage1", blob, "croppedImg.png");
-
-                        fetch("/editProduct", {
-                            method: "POST",
-                            body: formData,
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                window.location.href = "/products";
-                            } else {
-                                console.error("Upload failed:", data.error);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                        });
-                    });
-
-                    cropper.destroy();
-                }
-            );
+            reader.readAsDataURL(file);
         }
     }
     </script>

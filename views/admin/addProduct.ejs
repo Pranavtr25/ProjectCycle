@@ -270,6 +270,24 @@
           img.src = e.target.result;
           img.style.margin = "30px";
 
+            // Create a delete button for the image
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "btn btn-danger";
+        deleteButton.style.marginLeft = "10px";
+
+        // Add an event listener to delete the image when the button is clicked
+        deleteButton.addEventListener("click", function () {
+            div.remove(); // Remove the image container
+            // Remove the Cropper instance from the array
+            crop.splice(i, 1);
+            // Update the file input value if needed
+            document.getElementById("image").value = "";
+        });
+
+      // Append the delete button to the container
+      div.appendChild(deleteButton);
+
           // Append the image to the container
           div.appendChild(img);
           imageDiv.appendChild(div);
