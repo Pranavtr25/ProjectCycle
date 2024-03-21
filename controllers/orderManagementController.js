@@ -2,15 +2,33 @@ const cartModel = require("../model/cartModel");
 const categoryModel = require("../model/categoryModel");
 const productModel = require("../model/productModel");
 const orderModel =require("../model/orderModel");
+const razorPay = require("razorpay")
 const { deleteMany } = require("../model/userModel");
+const dotenv=require("dotenv")
+dotenv.config();
+
+
+async function productStockMaintain (cartData){
+    console.log(`cartData : ${JSON.stringify(cartData)}`)
+    await cartData.forEach(async(data)=>{
+        id = data.productId._id
+        dec = data.productQuantity
+        await productModel.findByIdAndUpdate({_id:id},{$inc:{"productStock":-dec}})
+    })
+}
+
+
+const {RAZORPAY_ID_KEY,RAZORPAY_SECRET_KEY} = process.env
+
+let instance = new razorPay({
+    key_id: RAZORPAY_ID_KEY,
+    key_secret: RAZORPAY_SECRET_KEY
+  });
 
 const orderData = async (req,res)=>{
     try {
         const cartValue= await cartModel.find({userId:req.session?.userData?._id}).populate("productId")
-        // console.log("-------------------------------------------------------cartdata-------------------------")
-        // console.log(cartValue)
-        // console.log("-------------------------------------------------------cartdata-------------------------")
-
+        
         const{
             grandTotalCheckout,
             paymentTypeValue,
@@ -30,22 +48,12 @@ const orderData = async (req,res)=>{
 
         await orderModel(data).save();
 
-        console.log(`=====================`)
-        console.log(JSON.stringify(cartValue))
-        console.log(`=====================`)
-
         const decProductData = JSON.stringify(cartValue)
 
        await cartValue.forEach(async data=>{
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:-data.productQuantity}})
         })
-        // console.log(`deccccccc : ${decProductArr}`)
-
-        // cartModel.forEach(data=>{
-        //     console.log(data.productQuantity , data.productId)
-        // })
-
-        await cartModel.deleteMany({userId:req.session?.userData?._id});
+                await cartModel.deleteMany({userId:req.session?.userData?._id});
 
         res.status(200).send({success:true})
 
@@ -56,14 +64,75 @@ const orderData = async (req,res)=>{
 }
 
 
+const razorPayOrder = async (req,res)=>{
+    try {
+        console.log(req.body)
+
+        const grandTotalCheckout = req.body.grandTotalCheckout
+        req.session.razorPayOrderData = req.body
+        console.log(`razorrrrr : ${req.session.razorPayOrderData.grandTotalCheckout}`)
+
+        instance.orders
+          .create({
+            amount: grandTotalCheckout + "00",
+            currency: "INR",
+            receipt: "receipt#1",
+          }).then((order) => {
+            console.log(`order ID : \n${order.id} `)
+            res.json(order)
+            // return res.send({ orderId: order.id });
+          }).catch((err)=>{
+            console.log(err)
+          });
+    } catch (error) {
+        console.error(`error in razorpay order \n ${error}`);
+    }
+}
+
+const razorPayOrderSuccess = async (req,res)=>{
+    try {
+        // console.log(req)
+        const userId = req.session?.userData?._id
+        const orderNumber=await orderModel.countDocuments() + 1
+        const userCartData = await JSON.parse(JSON.stringify(await cartModel.find({userId:userId}).populate("productId")))
+        const grandTotalCheckout = req.session?.razorPayOrderData?.grandTotalCheckout
+        const paymentTypeValue = req.session?.razorPayOrderData?.paymentTypeValue
+        const selectAddressValue = req.session?.razorPayOrderData?.selectAddressValue
+        const razorPayId = req.body?.razorpay_payment_id
+
+        const orderDetails = {
+            userId:userId,
+            orderNumber:orderNumber,
+            paymentType:paymentTypeValue,
+            addressChosen:selectAddressValue,
+            cartData:userCartData,
+            grandTotalCost:grandTotalCheckout,
+            razorPayId:razorPayId
+        }
+
+        req.session.orderNumber=orderNumber
+
+        await orderModel(orderDetails).save()
+
+        productStockMaintain(userCartData)
+
+        await cartModel.deleteMany({userId:userId})
+
+        res.status(401).redirect("/orderSuccess")
+
+    } catch (error) {
+        console.error(`error in razor pay order success \n ${error}`);
+    }
+}
+
+
 const getOrderSuccess = async (req,res)=>{
     try {
         req.session.userData;
         const cartData = await cartModel.find({userId:req.session.userData._id}).populate("productId");
         console.log(cartData)
-        const orderNumber = req.session.orderNumber;
+        const orderNumber = req.session?.orderNumber;
         const orderData = await orderModel.findOne({userId:req.session.userData._id,orderNumber:orderNumber})
-        console.log(`orderrrrrrr  data : ${orderData}`)
         res.render("user/orderSuccess",{userData:req.session.userData,cartData,orderData})
     } catch (error) {
         console.error(`error while getting the getting the order success page \n ${error}`);
@@ -76,5 +145,7 @@ const getOrderSuccess = async (req,res)=>{
 
 module.exports={
     orderData,
-    getOrderSuccess
+    getOrderSuccess,
+    razorPayOrderSuccess,
+    razorPayOrder
 }

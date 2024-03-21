@@ -540,6 +540,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
 <script>
 
@@ -553,6 +555,8 @@
 
         const selectAddressValue = selectAddress.value;
 
+        console.log(paymentTypeValue)
+
         if(selectAddressValue==="select"){
             return await Swal.fire({
                 title: "sorry",
@@ -561,24 +565,42 @@
                 })
         }
         if(paymentTypeValue){
-            let data={
-                grandTotalCheckout,
-                paymentTypeValue,
-                selectAddressValue
-            }
-            const response=await fetch(`/orderData`,{
-                    method:"POST",
-                    headers:{
-                        "Content-Type":"application/json"
-                    },
-                    body:JSON.stringify(data)
-                })
-            const value=await response.json();
+            if(paymentTypeValue=="Cash on delivery"){
+                let data={
+                    grandTotalCheckout,
+                    paymentTypeValue,
+                    selectAddressValue
+                }
+                const response=await fetch(`/orderData`,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(data)
+                    })
+                const value=await response.json();
 
-            if(value.success){
-                
-                window.location.href="/orderSuccess"           
+                if(value.success){               
+                    window.location.href="/orderSuccess"           
+                }
+            } else if(paymentTypeValue=="razorPay"){
+                let data = {
+                    grandTotalCheckout,
+                    paymentTypeValue,
+                    selectAddressValue
+                }
+                const response=await fetch(`/razorPayOrder`,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(data)
+                    })
+                const order = await response.json();
+
+                await openRazorpay(grandTotalCheckout,order.id)
             }
+            
         }else{
             return await Swal.fire({
                 title: "sorry",
@@ -589,6 +611,36 @@
     
     }
 
+</script>
+
+<script>
+    // Function to open Razorpay
+    async function openRazorpay(amount, creditId) {
+       try {           
+           var options = {
+               key: "rzp_test_tqXOX04rVAA21H",
+               amount: "" + amount*100,
+               currency: "INR",
+               name: "Cycle Store",
+               description: "Test Transaction",
+               callback_url: "/order/orderPlaced",
+               image: "/assets/images/demos/demo-13/logo.png",
+               credit_id: creditId,
+               theme: {
+                   color: "#3399cc",
+               },
+           };
+         
+
+           var razorpay = new Razorpay(options);
+       
+        
+           await   razorpay.open();
+           
+       } catch (error) {
+           console.error(error);
+       }
+   }
 </script>
 
 

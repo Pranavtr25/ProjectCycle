@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Cycle Store</title>
     <meta name="keywords" content="HTML5 Template">
-    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="description" content="Cycle Store">
     <meta name="author" content="p-themes">
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
@@ -45,27 +45,22 @@
                         <ul class="top-menu">
                             <li>
                                 <a href="#">Links</a>
-
-                                
+                        
                                 <% if(userData){ %>
-                                    <ul>
-                                        <a href="/profile"><p style="color:  #b58555;">Hello , <%= userData.userName%></p></a>
-                                    </ul>
-                                    <ul>
-                                        <li class="logout">
-                                            <a href="/userLogout">Logout</a>
-                                        </li>
-                                    </ul>
+                                <ul>
+                                    <!-- <li><a href="/wishlist"><i class="icon-heart-o"></i> Wishlist </a></li> -->
+                                    <li><a href="/profile"><i class="icon-user" style="color: #b58555;"></i> Hello, <%= userData.userName %></a></li>
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li class="logout"><a href="/userLogout">Logout</a></li>
+                                </ul>
                                 <% } else{ %>
-                                    <ul>
-                                        <li class="login">
-                                            <a href="/signup">Sign in / Sign up</a>
-                                        </li>
-                                    </ul>
+                                <ul>
+                                    <li class="login"><a href="/signup">Sign in / Sign up</a></li>
+                                </ul>
                                 <% } %>
-                                
                             </li>
                         </ul><!-- End .top-menu -->
+                        
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-top -->
@@ -90,11 +85,10 @@
                         <% if(userData){ %>
                             <div class="header-dropdown-link">
     
-                                <!-- <a href="wishlist.html" class="wishlist-link">
+                                <a href="/wishlist" class="wishlist-link">
                                     <i class="icon-heart-o"></i>
-                                    <span class="wishlist-count">3</span>
                                     <span class="wishlist-txt">Wishlist</span>
-                                </a> -->
+                                </a>
     
                                 <div class="dropdown cart-dropdown">
                                     <a href="/cart" class="dropdown-toggle">

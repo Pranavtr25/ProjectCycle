@@ -71,12 +71,17 @@ const {
 
 const {
     orderData,
+    razorPayOrder,
+    razorPayOrderSuccess,
     getOrderSuccess
 } = require("../controllers/orderManagementController")
 
 
 const {
-    getWishlist
+    getWishlist,
+    addWishlistData,
+    addToCartFromWishlist,
+    deleteWishlistProduct
 } = require("../controllers/wishlistControllers")
 
 
@@ -188,7 +193,12 @@ router.get("/checkout",isUserBlock,isUserActive,getCheckout)
 
 router.post("/orderData",isUserBlock,isUserActive,orderData)
 
+router.post("/razorPayOrder",isUserBlock,isUserActive,razorPayOrder)
+
+router.all("/order/orderPlaced",isUserBlock,isUserActive,razorPayOrderSuccess)
+
 router.get("/orderSuccess",isUserBlock,isUserActive,getOrderSuccess)
+
 
 
 // -------------------------------------------------------------wishlist----------------------------------------------
@@ -196,7 +206,11 @@ router.get("/orderSuccess",isUserBlock,isUserActive,getOrderSuccess)
 
 router.get("/wishlist",isUserBlock,isUserActive,getWishlist)
 
+router.post("/addToWishlist:id",isUserBlock,isUserActive,addWishlistData)
 
+router.post("/wishlist/addToCart:id",isUserBlock,isUserActive,addToCartFromWishlist)
+
+router.delete("/wishlist/delete:id",isUserBlock,isUserActive,deleteWishlistProduct)
 
 // -------------------------------------------------------------------------------------------------------------------
 router.get("*/",getErrorPage)

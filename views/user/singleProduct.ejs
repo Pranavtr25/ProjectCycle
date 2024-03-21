@@ -124,12 +124,15 @@
                                             <button onclick="addToCart('<%=productData._id%>')" class="btn-product btn-cart"><span>add to cart</span></button>
                                         </div><!-- End .details-action-col -->
 
-                                        <!-- <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                        </div> -->
-                                        <!-- End .details-action-wrapper -->
+                                        
                                     </div><!-- End .product-details-action -->
                                     <% } %>
+                                    <div class="product-details-action">
+                                        <div class="details-action-wrapper">
+                                            <button onclick="addToWishlist('<%=productData._id%>')" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></button>
+                                        </div>
+                                    </div>
+                                    <!-- End .details-action-wrapper -->
 
                                     <div class="product-details-footer">
                                         <div class="product-cat">
@@ -640,6 +643,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
+
+
     let productQuantity=Number("<%=productQuantity%>")
     const productStock=Number(document.getElementById("productStock").textContent.trim())
     async function addToCart(id){
@@ -656,7 +662,7 @@
     
                 if(dataRes.success)
                 {
-                    Swal.fire({
+                    await Swal.fire({
                         icon: 'success',
                         title: 'Item Added to Cart',
                         showConfirmButton: false,
@@ -664,7 +670,7 @@
                     });
                 }
             }else{
-                Swal.fire({
+                await Swal.fire({
                 title: "sorry",
                 text: "maximum limit exceeded",
                 icon: "error",
@@ -673,6 +679,46 @@
     
             
     }
+
+
+
+    async function addToWishlist(id){
+        try {
+            console.log(id)
+            const data = await fetch(`/addToWishlist${id}`,{
+                                    method:"POST",
+                                    headers:{
+                                        "Content-Type":"application/json"
+                                    }
+                    })   
+                const dataRes = await data.json()
+                if (dataRes.success && dataRes.wishlistAlreadyExist) {
+                    await  Swal.fire({
+                            title: "sorry",
+                            text: "Item already added to the wishlist",
+                            icon: "error",
+                        })
+                }else if(dataRes.success && dataRes.wishlistAlreadyExist===false){
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Item Added to Wishlist',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }else{
+                    await  Swal.fire({
+                            title: "sorry",
+                            text: "Something went wrong",
+                            icon: "error",
+                        })
+                }
+        } catch (error) {
+            console.error(`error in the function addToWishlist \n ${error}`);
+        }
+    }
+
+
+
 </script>
 
 <!-- molla/product-centered.html  22 Nov 2019 10:03:20 GMT -->
