@@ -2,7 +2,21 @@
 
 
 
+<style>
 
+.user-details {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto; /* Center horizontally */
+    justify-content: center;
+    align-items: center; /* Center vertically */
+    max-width: 400px; /* Optional: Set a maximum width */
+    padding: 20px; /* Optional: Add padding for spacing */
+}
+
+
+</style>
 
 
         <div class="container profile-container">
@@ -18,11 +32,22 @@
             </div>
             <hr>
     
-            <div class="user-details" style="display: flex; flex-direction: column; text-align: center; justify-content: center;">
-                <h2><%= userData.userName %></h2>
-                <p><strong>Mobile No :</strong> <%= userData.phoneNumber %></p>
-                <p><strong>Email:</strong> <%= userData.email %></p>
+            <div class="user-details">
+                <div>
+                    <h2><%= userData.userName %></h2>
+                    <p><strong>Mobile No :</strong> <%= userData.phoneNumber %></p>
+                    <p><strong>Email :</strong> <%= userData.email %></p>
+                    <p><strong>Wallet Amount :</strong> ₹<%= walletData?.walletBalance ?? 0%></p>
+                    <div class="form-group">
+                        <label for="referralCode"><strong>Referral Code :</strong></label>
+                        <input type="text" class="form-control" id="referralText" aria-describedby="emailHelp" value="http://localhost:3000/signup?referralCode=<%= (userData?.referralCode)?.toLowerCase() %>" disabled>
+                        <br>
+                        <button type="submit" id="copyReferral" class="btn btn-primary">Copy</button>
+                    </div>
+                </div>
             </div>
+            
+
     
             <hr>
     
@@ -461,5 +486,25 @@
 </body>
 
 <!-- molla/404.html  22 Nov 2019 10:04:04 GMT -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  
+  <script>
+    const referralText = document.getElementById("referralText")
+
+    const copyReferral = document.getElementById("copyReferral")
+
+    copyReferral.addEventListener("click",()=>{
+        // Select the text field
+        referralText.select();
+ 
+        referralText.setSelectionRange(0, 99999); //For mobile devices
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(referralText.value);
+    Swal.fire("Successfully Copied !");
+    })
+  </script>
 
 </html>

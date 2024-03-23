@@ -48,6 +48,21 @@ const {
 } = require("../controllers/adminOrderController")
 
 
+const {
+    getCouponManagement,
+    addCouponData,
+    editCouponData,
+    deleteCouponData,
+} = require("../controllers/couponManagement")
+
+
+const {
+    getProductOfferList,
+    productAddOfferData,
+    productEditOfferData,
+    getCategoryOfferList,
+    categoryAddOfferData
+} = require("../controllers/offerController")
 
 
 router.get("/adminLogin",getAdminLogin)
@@ -108,6 +123,30 @@ router.get("/orderList",isAdminActive,getOrderList)
 router.get("/orderListStatus:id",isAdminActive,updateOrderStatus)
 
 router.get("/singleOrder:id",isAdminActive,getSingleOrderDetail)
+
+
+// -----------------------------------------------------coupon management--------------------------------
+
+router.get("/couponManagement",isAdminActive,getCouponManagement)
+
+router.post("/admin/couponManagement/addCoupon",isAdminActive,addCouponData)
+
+router.put("/couponManagement/editCoupon/:id",isAdminActive,editCouponData)
+
+router.delete("/couponManagement/deleteCoupon/:id",isAdminActive,deleteCouponData)
+
+
+// ------------------------------------------------------offer management----------------------------------
+
+router.get("/productOfferList",isAdminActive,getProductOfferList)
+
+router.post("/productOfferManagement/addOffer",isAdminActive,productAddOfferData)
+
+router.put("/productOfferManagement/editOffer/:id",isAdminActive,productEditOfferData)
+
+router.get("/categoryOfferList",isAdminActive,getCategoryOfferList)
+
+router.post("/categoryOfferList/addOffer",isAdminActive,categoryAddOfferData)
 
 
 

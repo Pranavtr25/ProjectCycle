@@ -41,6 +41,29 @@ const productSchema= new mongoose.Schema({
     productHighlight:{
         type:String,
         required:true
+    },
+
+
+    
+    productOfferId:
+    { 
+        type: mongoose.Types.ObjectId,
+         default: null 
+    },
+    productOfferPercentage:
+    { 
+        type: Number,
+         default: null 
+    },
+    priceBeforeOffer: 
+    { 
+        type: Number,
+         default: null 
+    },
+    productafterOfferPrice: 
+    { 
+        type: Number,
+        default: null 
     }
 })
 

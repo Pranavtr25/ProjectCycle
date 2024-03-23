@@ -3,6 +3,7 @@ const categoryModel = require("../model/categoryModel");
 const productModel = require("../model/productModel");
 const orderModel =require("../model/orderModel");
 const razorPay = require("razorpay")
+const walletCollection = require("../model/walletModel")
 const { deleteMany } = require("../model/userModel");
 const dotenv=require("dotenv")
 dotenv.config();
@@ -35,6 +36,26 @@ const orderData = async (req,res)=>{
             selectAddressValue
         } = req.body
 
+        if(paymentTypeValue=="Wallet"){
+            const walletData = await walletCollection.findOne({userId:req.session?.userData._id})
+            console.log(`walletData..........${walletData}`)
+            if(walletData.walletBalance < grandTotalCheckout){
+                return res.status(501).send({success:false,insufficientWalletBalance:true})
+            }else{
+                const transactionAmount = grandTotalCheckout
+                const transactionType = paymentTypeValue
+
+                const saveWallet = {
+                    transactionAmount,
+                    transactionType
+                }
+                await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$push:{walletDebitTransaction:saveWallet}})
+
+                const walletNewAmount = walletData.walletBalance - grandTotalCheckout;
+                await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$set:{walletBalance:walletNewAmount}})
+            }
+        }
+
         const data ={
             userId:req.session?.userData?._id,
             orderNumber:await orderModel.find().estimatedDocumentCount()+1,
@@ -53,9 +74,9 @@ const orderData = async (req,res)=>{
        await cartValue.forEach(async data=>{
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:-data.productQuantity}})
         })
-                await cartModel.deleteMany({userId:req.session?.userData?._id});
+            await cartModel.deleteMany({userId:req.session?.userData?._id});
 
-        res.status(200).send({success:true})
+        return res.status(200).send({success:true})
 
     } catch (error) {
         console.error(`error while saving the order data \n ${error}`);

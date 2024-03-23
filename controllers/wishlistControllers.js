@@ -14,7 +14,7 @@ const getWishlist = async (req,res)=>{
         console.log(wishlistData)
         // const cartProductData=await cartModel.findOne({userId:userData._id,productId:id})
         // const productQuantity= cartProductData?.productQuantity || 0
-        res.render("user/wishlist",{wishlistData})
+        res.render("user/wishlist",{wishlistData,userData})
     } catch (error) {
         console.error(`error while getting the wishlist page \n ${error}`);
     }

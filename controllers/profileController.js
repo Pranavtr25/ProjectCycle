@@ -4,12 +4,17 @@ const {emailOTPGenerate}=require("../controllers/userControllers")
 const bcrypt = require("bcrypt");
 const orderModel = require("../model/orderModel");
 const productModel = require("../model/productModel");
+const walletCollection = require("../model/walletModel")
 
 
 const getProfile = async (req,res)=>{
     try {
-        userData=await userModel.findById({_id:req.session?.userData?._id})
-        res.render("user/profile",{userData})
+        // console.log(`profffffile dat : ${req.session?.userData?._id}`)
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        console.log(`=====================${req.session.userData._id}`)
+        const walletData= await walletCollection.findOne({userId:req.session?.userData?._id})
+        console.log(`walletData ............. \n ${walletData}`)
+        res.render("user/profile",{userData,walletData})
     } catch (error) {
         console.error(`error while getting the profile page \n ${error}`);
     }
@@ -17,7 +22,8 @@ const getProfile = async (req,res)=>{
 
 const getEditProfile=async (req,res)=>{
     try {
-        res.render("user/editProfile")
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/editProfile",{userData})
     } catch (error) {
         console.error(`error while getting the edit profile page \n ${error}`);
     }
@@ -58,7 +64,8 @@ const editProfileData = async (req,res)=>{
 
 const getAddAddress= async (req,res)=>{
     try {
-        res.render("user/addAddress")
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/addAddress",{userData})
     } catch (error) {
         console.error(`error while getting the getting the add address page \n ${error}`);
     }
@@ -89,7 +96,8 @@ const getEditAddress = async (req,res)=>{
         const addressId=req.params.id;
         const addressData = await AddressModel.findById({_id:addressId})
         console.log(addressData)
-        res.render("user/editAddress",{addressData})
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/editAddress",{addressData,userData})
     } catch (error) {
         console.error(`error while getting the edit address page \n ${error}`);
     }
@@ -128,10 +136,10 @@ const deleteAddress = async (req,res)=>{
 
 const getMyAddress=async (req,res)=>{
     try {
-        const userData=req.session.userData
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
         const addressData=await AddressModel.find({user_id:userData._id})
         console.log(`addressdata is \n ${addressData}`)
-        res.render("user/myAddress",{addressData})
+        res.render("user/myAddress",{addressData,userData})
     } catch (error) {
         console.error(`error while getting the my address page \n ${error}`);
     }
@@ -178,7 +186,8 @@ const profileOTPVerification = async (req,res)=>{
 
 const getProfileChangePassword= async (req,res)=>{
     try {
-        res.render("user/profileChangePassword")
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/profileChangePassword",{userData})
     } catch (error) {
         console.error(`error while getting profile change password \n ${error}`);
     }
@@ -224,7 +233,8 @@ const getuserOrders = async (req,res)=>{
         console.log("............................................................................")
         console.log(orderData)
         console.log("............................................................................")
-        res.render("user/userOrdersList",{orderData,limit,count})
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/userOrdersList",{orderData,limit,count,userData})
     } catch (error) {
         console.error(`error while getting the user order list \n ${error}`);
     }
@@ -259,9 +269,29 @@ const cancelReturnOrder = async (req,res)=>{
             await orderModel.findOneAndUpdate({_id:orderId},{$set:{orderStatus:"Returned"}})
         }
 
+        
         orderData.cartData.forEach(async data => {
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:data.productQuantity}})
         });
+
+        const transactionAmount = orderData?.grandTotalCost
+        const transactionType = orderData?.paymentType
+
+        const saveWallet = {
+            transactionAmount,
+            transactionType
+        }
+
+
+        const userId = req.session?.userData?._id
+
+        const walletData = await walletCollection.findOne({userId:userId})
+
+        const pushOrder = await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$push:{walletCreditTransaction:saveWallet}})
+
+        const walletNewAmount = walletData.walletBalance + orderData.grandTotalCost;
+
+        await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$set:{walletBalance:walletNewAmount}})
 
         res.redirect("/profile/userOrders")
     } catch (error) {

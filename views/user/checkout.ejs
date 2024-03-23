@@ -565,7 +565,7 @@
                 })
         }
         if(paymentTypeValue){
-            if(paymentTypeValue=="Cash on delivery"){
+            if(paymentTypeValue=="Cash on delivery" || paymentTypeValue =="Wallet"){
                 let data={
                     grandTotalCheckout,
                     paymentTypeValue,
@@ -580,7 +580,13 @@
                     })
                 const value=await response.json();
 
-                if(value.success){               
+                if(value.success===false && value.insufficientWalletBalance){
+                    return await Swal.fire({
+                        title: "sorry",
+                        text: "Insufficient Wallet Balance",
+                        icon: "error",
+                    })
+                }else if(value.success){               
                     window.location.href="/orderSuccess"           
                 }
             } else if(paymentTypeValue=="razorPay"){

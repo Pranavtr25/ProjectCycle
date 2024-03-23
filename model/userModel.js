@@ -21,7 +21,11 @@ const userSchema=new mongoose.Schema({
     block:{
         type:Boolean,
         default:false
-    } 
+    },
+    referralCode:{
+        type:String,
+        required:true
+    }
 })
 
 const user=mongoose.model("userdatas",userSchema)

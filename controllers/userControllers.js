@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const usermodel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const bodyparser = require("body-parser");
+const walletCollection = require("../model/walletModel") 
 
 const getLandingPage = async (req, res) => {
   try {
@@ -59,6 +60,10 @@ const getSignupPage = async (req, res) => {
     if(req.session.userData){
       res.redirect("/")
     }else{
+      const referralCode = req.query.referralCode;
+      if(referralCode){
+        req.session.referralCode=referralCode;
+      }
       req.session.emailExist;
       req.session.invalidLoginDetails;
       req.session.userData;
@@ -155,6 +160,19 @@ const emailOTPGenerate = async (email) => {
   }
 };
 
+async function referralCodeGenerate(){
+  try {
+    const referralCode = Math.random().toString(36).substring(2,7);
+    const existingReferral = await usermodel.findOne({referralCode:referralCode})
+    if(existingReferral){
+      referralCodeGenerate();
+    }
+    return referralCode;
+  } catch (error) {
+    console.error(`error while generating the referrral code \n ${error} `);
+  }
+}
+
 const signupOTPVerification = async (req, res) => {
   try {
     const userOTP = Number(req.params.OTP);
@@ -162,8 +180,25 @@ const signupOTPVerification = async (req, res) => {
 
     if (userOTP === genOTP) {
       const userData = req.session.userData;
+      const referralCodeGEN = await referralCodeGenerate();
+      userData.referralCode = referralCodeGEN;
       console.log(userData);
-      await new usermodel(userData).save();
+      if(req.session?.referralCode){
+        const userReferral = await usermodel.findOne({referralCode:req.session?.referralCode})
+        console.log(`==========--------------user referrral daatassssss : ${userReferral}`)
+        if(userReferral){
+           await walletCollection.updateOne({userId:userReferral._id},{$inc:{walletBalance:500}})
+        }
+        req.session.referralCode=null
+      }
+      console.log(`--------------referralcode-----------${req.session.referralCode}`)
+      // const {userName,phoneNumber,}
+      console.log(`referralCode...................${referralCodeGEN}`)
+      const userDetails = await new usermodel(userData).save();
+      console.log(`userDetails  ------------------------${userDetails}`)
+      req.session.userData._id=userDetails?._id
+      // console.log(`userDetails.... ${userDetails}`)
+      await new walletCollection({userId:userDetails?._id}).save()
       console.log("data saved successfully");
       req.session.userExist = {
         isActive: true,
