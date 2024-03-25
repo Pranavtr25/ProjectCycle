@@ -61,8 +61,15 @@ const {
     productAddOfferData,
     productEditOfferData,
     getCategoryOfferList,
-    categoryAddOfferData
+    categoryAddOfferData,
+    categoryEditOfferData,
+    editCategoryOfferStatus
 } = require("../controllers/offerController")
+
+
+const {
+    getSalesReport
+} = require("../controllers/salesReportController")
 
 
 router.get("/adminLogin",getAdminLogin)
@@ -148,7 +155,14 @@ router.get("/categoryOfferList",isAdminActive,getCategoryOfferList)
 
 router.post("/categoryOfferList/addOffer",isAdminActive,categoryAddOfferData)
 
+router.put("/categoryOfferList/editOffer",isAdminActive,categoryEditOfferData)
 
+router.get("/categoryOfferStatus/:id",isAdminActive,editCategoryOfferStatus)
+
+
+// ---------------------------------------------------------sales report----------------------------------------
+
+router.get("/salesReport",isAdminActive,getSalesReport)
 
 
 module.exports=router;

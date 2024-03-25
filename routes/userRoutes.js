@@ -31,7 +31,8 @@ const {
     productPriceRangeData,
     categoryFilterData,
     productSortData,
-    clearProductFilters
+    clearProductFilters,
+    searchFilter
 }=require("../controllers/userProductController")
 
 
@@ -134,6 +135,8 @@ router.get("/categoryFilter:id",isUserBlock,isUserActive,categoryFilterData)
 router.post("/productSort",isUserBlock,isUserActive,productSortData)
 
 router.get("/clearFilters",isUserBlock,isUserActive,clearProductFilters)
+
+router.post("/search",isUserBlock,isUserActive,searchFilter)
 
 // -------------------------------------------cart---------------------------
 

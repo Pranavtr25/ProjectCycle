@@ -49,6 +49,8 @@ module.exports = {
 async function offerExistsAndActiveFn(v, offerExists, from) {
 
   try{
+
+
     let { productOfferPercentage } = offerExists;
 
     let productPrice = await productCollection.findOne({_id:v})
@@ -57,13 +59,16 @@ async function offerExistsAndActiveFn(v, offerExists, from) {
       let productPrice = Math.round(
         v.productPrice * (1 - productOfferPercentage * 0.01)
       );
+      console.log(`======offerExistsAndActiveFn==========`)
+      console.log(offerExists._id)
+      console.log(productOfferPercentage)
       await productCollection.updateOne(
         { _id: v._id },
         {
           $set: {
             productPrice,
             productOfferId: offerExists._id,
-            productOfferPercentage,
+            productOfferPercentage:productOfferPercentage,
             priceBeforeOffer: v.productPrice,
             productafterOfferPrice
           },

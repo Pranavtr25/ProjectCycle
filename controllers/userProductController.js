@@ -11,11 +11,13 @@ const getUserProduct=async (req,res)=>{
         let skip=(page-1)*limit;
 
         // let productData=await productModel.find({isListed:true}).skip(skip).limit(limit);
-        const maxVal=await productModel.aggregate([{$group:{_id:null,maxValue:{$max:"$productPrice"}}},{$project:{_id:0,maxValue:1}}])
-        const minVal=await productModel.aggregate([{$group:{_id:null,minValue:{$min:"$productPrice"}}},{$project:{_id:0,minValue:1}}])
+        let maxVal=await productModel.aggregate([{$group:{_id:null,maxValue:{$max:"$productPrice"}}},{$project:{_id:0,maxValue:1}}])
+        let minVal=await productModel.aggregate([{$group:{_id:null,minValue:{$min:"$productPrice"}}},{$project:{_id:0,minValue:1}}])
 
-        const productGTE=req.session.productGTE || minVal[0].minValue; //if the user didnt gave any filter then the or condition should work and in that the min and max value will be fetched directly from the database
-        const productLTE=req.session.productLTE || maxVal[0].maxValue;
+        let productGTE=req.session.productGTE || minVal[0].minValue; //if the user didnt gave any filter then the or condition should work and in that the min and max value will be fetched directly from the database
+        let productLTE=req.session.productLTE || maxVal[0].maxValue;
+        let productData;
+        let totalCount;
     
         req.session.save()
 
@@ -23,13 +25,13 @@ const getUserProduct=async (req,res)=>{
 
             console.log(req.session.categoryFilterName)
 
-            const minVal=await productModel.aggregate([
+             minVal=await productModel.aggregate([
                 {$match:{parentCategory:req.session.categoryFilterName}},
                 {$group:{_id:null,minValue:{$min:"$productPrice"}}},
                 {$project:{_id:0,minValue:1}}
             ])
             
-            const maxVal = await productModel.aggregate([
+             maxVal = await productModel.aggregate([
                 {$match:{parentCategory:req.session.categoryFilterName}},
                 {$group:{_id:null,maxValue:{$max:"$productPrice"}}},
                 {$project:{_id:0,maxValue:1}}
@@ -39,16 +41,34 @@ const getUserProduct=async (req,res)=>{
             console.log(minVal)
             // req.session.productLTE 
 
-            const productGTE =  req.session?.productGTE || Number(minVal[0]?.minValue)
-            const productLTE =  req.session?.productLTE || Number(maxVal[0]?.maxValue) 
+             productGTE =  req.session?.productGTE || Number(minVal[0]?.minValue)
+             productLTE =  req.session?.productLTE || Number(maxVal[0]?.maxValue) 
 
             let categoryData=await categoryModel.find({isListed:true})
 
             const priceSelect=`${productGTE}-${productLTE}`
             console.log(priceSelect)
-            let productData=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE},parentCategory:req.session.categoryFilterName}).skip(skip).limit(limit) 
-            
-            let totalCount=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE},parentCategory:req.session.categoryFilterName}).countDocuments();
+
+
+
+            if(req.session?.search){
+                
+                productData = await productModel.find({$or: [{ productName: { $regex:req.session?.search , $options: "i" },isListed:true,parentCategory:req.session.categoryFilterName,productPrice:{$gte:productGTE,$lte:productLTE} }]}).skip(skip).limit(limit)
+                totalCount = await productModel.find({$or: [{ productName: { $regex:req.session?.search , $options: "i" },isListed:true,parentCategory:req.session.categoryFilterName,productPrice:{$gte:productGTE,$lte:productLTE} }]}).countDocuments()
+
+                req.session.search = null
+
+            }else{
+
+                console.log(` enter category else case`)
+             productData=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE},parentCategory:req.session.categoryFilterName}).skip(skip).limit(limit) 
+            console.log(productData) 
+            console.log(req.session.categoryFilterName) 
+            console.log(productGTE)
+            console.log(productLTE)
+             totalCount=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE},parentCategory:req.session.categoryFilterName}).countDocuments();
+
+            }
             let count=totalCount/limit;
             console.log("/////////////////////////////////////////////////////////////////////")
             console.log(productData)
@@ -74,11 +94,26 @@ const getUserProduct=async (req,res)=>{
         console.log(`[[[[[0]]]]]`)
         const priceSelect=`${productGTE}-${productLTE}`
         
+        if(req.session?.search){
 
+            console.log(`sucess`)
 
-        let productData=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE}}).skip(skip).limit(limit)
+            productData= await productModel.find({$or: [{ productName: { $regex:req.session?.search , $options: "i" },isListed:true,productPrice:{$gte:productGTE,$lte:productLTE} }]}).skip(skip).limit(limit)
+            totalCount = await productModel.find({$or: [{ productName: { $regex:req.session?.search , $options: "i" },isListed:true,productPrice:{$gte:productGTE,$lte:productLTE} }]}).countDocuments()
 
-        let totalCount=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE}}).countDocuments();
+            req.session.search = null
+ 
+
+        }else{
+
+            console.log(`totalCount endter`)
+        productData=await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE}}).skip(skip).limit(limit)
+
+        totalCount =await productModel.find({isListed:true,productPrice:{$gte:productGTE,$lte:productLTE}}).countDocuments();
+        console.log(totalCount)
+    }
+    console.log(totalCount)
+
         let count=totalCount/limit;
         let categoryData=await categoryModel.find({isListed:true})
         // console.log(`categoriesssss : \n ${categoryData}`)
@@ -98,6 +133,11 @@ const getUserProduct=async (req,res)=>{
         console.error(`error while getting the user products \n ${error}`);
     }
 }
+
+
+
+
+
 
 
 async function priceSortWithoutCategorisedFilter(req,productGTE,productLTE,skip,limit){
@@ -208,6 +248,11 @@ const getSingleProduct= async (req,res)=>{
     try {
         const id=req.params.id
         const productData=await productModel.findById({_id:id})
+
+
+
+        console.log(`======Single productData=========`)
+        console.log(productData)
         const parentCategory=productData.parentCategory
         // console.log(parentCategory)
 
@@ -241,6 +286,16 @@ const clearProductFilters = async (req,res)=>{
     }
 }
 
+const searchFilter = async (req,res)=>{
+    try {
+        req.session.search = req.body.value
+        req.session.save()
+        res.status(200).send({success:true})
+    } catch (error) {
+        console.error(`error while search filtering \n ${error}`);
+    }
+}
+
 
 module.exports={
     getUserProduct,
@@ -248,5 +303,6 @@ module.exports={
     productPriceRangeData,
     categoryFilterData,
     productSortData,
-    clearProductFilters
+    clearProductFilters,
+    searchFilter
 }

@@ -14,7 +14,7 @@ const getProductOfferList = async (req,res)=>{
     try {
       let productOfferData = await productOfferCollection.find();
           productOfferData.forEach(async (v) => {
-            await productOfferCollection.updateOne(
+           const viewDate =  await productOfferCollection.updateOne(
               { _id: v._id },
               {
                 $set: {
@@ -23,7 +23,10 @@ const getProductOfferList = async (req,res)=>{
                 },
               }
             );
+            console.log(viewDate)
           });
+
+         
     
           console.log(productOfferData)
           //sending the formatted date to the page
@@ -147,10 +150,50 @@ const categoryAddOfferData = async (req,res)=>{
   }
 }
 
+
+const categoryEditOfferData = async (req,res)=>{
+  try {
+    const { id, offerPercentage, startDate, endDate } = req.body;
+
+    const offer = await categoryOfferCollection.findByIdAndUpdate(id, {
+      offerPercentage,
+      startDate,
+      endDate,
+    });
+
+    return res.status(200).send({ success: true });
+  } catch (error) {
+    console.error(`error while editing the existing category offer \n ${error}`);
+    return res.status(500).send({ success: false });
+  }
+}
+
+const editCategoryOfferStatus = async (req,res)=>{
+  try {
+     const { id } = req.params;
+                  const offer = await categoryOfferCollection.findOne({ _id: id });
+                  if (offer?.isAvailable) {
+                    await categoryOfferCollection.findByIdAndUpdate(id, {
+                      isAvailable: false,
+                    });
+                  } else {
+                    await categoryOfferCollection.findByIdAndUpdate(id, {
+                      isAvailable: true,
+                    });
+                  }
+                  res.redirect("/categoryOfferList");
+  } catch (error) {
+    console.error(`error while editing the category offer status \n ${error}`);
+  }
+}
+
+
 module.exports = {
     getProductOfferList,
     productAddOfferData,
     productEditOfferData,
     getCategoryOfferList,
-    categoryAddOfferData
+    categoryAddOfferData,
+    categoryEditOfferData,
+    editCategoryOfferStatus
 }

@@ -27,6 +27,16 @@
                                     <!-- End .toolbox-info -->
                 				<!-- </div> -->
                                 <!-- End .toolbox-left -->
+                                <div class="toolbox-left">
+                                    <form  >
+                                        <div class="header-search-wrapper">
+                                            <label for="q" class="sr-only">Search</label>
+                                            <input type="search" class="form-control" id="searchFilter"    name="q" id="q" placeholder="Search in..."
+                                            required>
+                                        </div><!-- End .header-search-wrapper -->
+                                    </form>
+                                    <button onclick="searchFilter()" class="search-toggle" role="button"><i class="icon-search"></i></button>
+                                </div>
 
                 				<div class="toolbox-right">
                 					<div class="toolbox-sort">
@@ -554,6 +564,33 @@ async function sortBasedFilter(){
     } catch (error) {
         console.error(`error while fetching the data from sort based filter \n ${error}`);
     }
+}
+
+
+async function searchFilter(){
+
+   const value = document.getElementById("searchFilter").value
+
+   if(value){
+
+           const search = await fetch("/search",{
+     
+             method:"POST",
+             headers:{
+                 "Content-Type":"application/json"
+             },
+             body:JSON.stringify({value})
+           })
+
+           const res = await search.json()
+
+           if(res.success){
+
+            window.location.reload()
+           }
+
+       }
+
 }
 
     

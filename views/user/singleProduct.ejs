@@ -32,7 +32,10 @@
                                     <div class="row">
                                         <figure class="product-main-image">
                                             <img id="product-zoom" src="../../images/<%= productData.productImage1 %>" data-zoom-image="../../images/<%= productData.productImage1 %>" alt="product image">
-                                            <span class="product-label label-new" style="background-color: limegreen;">25% off</span>
+                                            <%if(productData.productOfferPercentage){%>
+
+                                                <span class="product-label label-new" style="background-color: limegreen;"><%=productData.productOfferPercentage%>% off</span>
+                                            <%}%>
                                             <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                                 <i class="icon-arrows"></i>
                                             </a>
@@ -72,10 +75,19 @@
                                         <!-- <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a> -->
                                     <!-- </div> -->
                                     <!-- End .rating-container -->
-
-                                    <div class="product-price">
-                                        ₹<%= productData.productPrice %>
-                                    </div><!-- End .product-price -->
+                                    <%if(productData.productOfferPercentage){%>
+                                        
+                                        <s>₹<%= productData.priceBeforeOffer%></s>
+                                        <div class="product-price">
+                                            New price :
+                                            ₹<%= productData.productPrice %>
+                                        </div><!-- End .product-price -->
+                                    <%}else{%>
+                                        <div class="product-price">
+                                            ₹<%= productData.productPrice %>
+                                        </div><!-- End .product-price -->
+                                    <%}%>
+                                    
                                     <% if (productData.productStock===0) { %>
                                         <div class="product-price" style="color: red;">
                                             <span  id="productStock">
