@@ -59,7 +59,6 @@ async function offerExistsAndActiveFn(v, offerExists, from) {
       let productPrice = Math.round(
         v.productPrice * (1 - productOfferPercentage * 0.01)
       );
-      console.log(`======offerExistsAndActiveFn==========`)
       console.log(offerExists._id)
       console.log(productOfferPercentage)
       await productCollection.updateOne(
@@ -94,7 +93,7 @@ async function offerExistsAndActiveFn(v, offerExists, from) {
         console.log(`step 2`)
     }
   }catch(err){
-    console.log(`service/applyProductoffers/offerExistsAndActiveFn\n ${err} `)
+    console.log(`\n ${err} `)
   }
 }
 
@@ -116,7 +115,7 @@ async function offerExistsAndInactiveFn(v, from) {
     }
 
   }catch(err){
-    console.log(`Error from service/applyProductoffers/offerExistsAndInactiveFn\n ${err}`)
+    console.log(`Error \n ${err}`)
   }
  
 }

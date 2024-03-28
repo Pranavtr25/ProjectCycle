@@ -68,7 +68,11 @@ const {
 
 
 const {
-    getSalesReport
+    getSalesReport,
+    salesReportFilter,
+    salesReportFilterCustom,
+    salesReportDownloadPDF,
+    salesReportDownload
 } = require("../controllers/salesReportController")
 
 
@@ -163,6 +167,14 @@ router.get("/categoryOfferStatus/:id",isAdminActive,editCategoryOfferStatus)
 // ---------------------------------------------------------sales report----------------------------------------
 
 router.get("/salesReport",isAdminActive,getSalesReport)
+
+router.post("/salesReport/filter", isAdminActive,salesReportFilter);
+
+router.post('/salesReport/filterCustom', isAdminActive,salesReportFilterCustom)
+
+router.get('/salesReport/download/pdf',isAdminActive,salesReportDownloadPDF)
+
+router.get("/salesReport/download/xlsx",isAdminActive,salesReportDownload);
 
 
 module.exports=router;

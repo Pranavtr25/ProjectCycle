@@ -110,24 +110,24 @@
                                 <% orderData.forEach(data => { %>
                                     
                                     <tr>
-                                        <td><%= data.orderNumber %></td>
-                                        <td><b><%= data.userId.userName %></b></td>
-                                        <td><%= data.userId.email %></td>
-                                        <td><%= data.grandTotalCost %></td>
-                                        <td><span class="badge rounded-pill alert-warning"><%= data.orderStatus %></span></td>
+                                        <td><%= data?.orderNumber %></td>
+                                        <td><b><%= data?.userId?.userName %></b></td>
+                                        <td><%= data?.userId?.email %></td>
+                                        <td><%= data?.grandTotalCost %></td>
+                                        <td><span class="badge rounded-pill alert-warning"><%= data?.orderStatus %></span></td>
                                         <td><%= data.orderDate.toLocaleDateString() %></td>
                                         <td>
-                                            <a href="/singleOrder<%= data.orderNumber %>" class="btn btn-md rounded font-sm">Detail</a>
+                                            <a href="/singleOrder<%= data?.orderNumber %>" class="btn btn-md rounded font-sm">Detail</a>
                                         </td>
                                         <td>
                                             <div class="dropdown">
                                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="/orderListStatusP<%=data._id%>">Pending</a>
-                                                    <a class="dropdown-item" href="/orderListStatusS<%=data._id%>">Ship</a>
-                                                    <a class="dropdown-item" href="/orderListStatusD<%=data._id%>">Deliver</a>
-                                                    <a class="dropdown-item" href="/orderListStatusR<%=data._id%>">Return</a>
-                                                    <a class="dropdown-item text-danger" href="/orderListStatusC<%=data._id%>">Cancel</a>
+                                                    <a class="dropdown-item" href="/orderListStatusP<%=data?._id%>">Pending</a>
+                                                    <a class="dropdown-item" href="/orderListStatusS<%=data?._id%>">Ship</a>
+                                                    <a class="dropdown-item" href="/orderListStatusD<%=data?._id%>">Deliver</a>
+                                                    <a class="dropdown-item" href="/orderListStatusR<%=data?._id%>">Return</a>
+                                                    <a class="dropdown-item text-danger" href="/orderListStatusC<%=data?._id%>">Cancel</a>
                                                 </div>
                                             </div>
                                         </td>
