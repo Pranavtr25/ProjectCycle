@@ -3,6 +3,8 @@ const usermodel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const bodyparser = require("body-parser");
 const walletCollection = require("../model/walletModel") 
+const wishlistCollection = require("../model/wishlistModel")
+const cartModel = require("../model/cartModel")
 
 const getLandingPage = async (req, res) => {
   try {
@@ -10,7 +12,12 @@ const getLandingPage = async (req, res) => {
     req.session.userData
     req.session.save();
     console.log(req.session.userData);
-    res.render("user/landing", { userData: req.session.userData});
+    const wishlistData = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+    const wishlistCount = wishlistData?.wishlistProducts.length;
+    const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+    req.session.wishlistCount = wishlistCount
+    req.session.cartCount = cartCount
+    res.render("user/landing", { userData: req.session.userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount});
   } catch (error) {
     console.log(`error while getting the landing page \n ${error}`);
   }
@@ -19,7 +26,9 @@ const getLandingPage = async (req, res) => {
 const getErrorPage=async(req,res)=>{
   try {
     req.session.userData;
-    res.render("user/404",{userData:req.session.userData})
+    // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
+    // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+    res.render("user/404",{userData:req.session.userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
   } catch (error) {
     console.error(`error while getting the error page \n ${error}`);
   }

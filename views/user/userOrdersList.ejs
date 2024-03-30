@@ -6,15 +6,18 @@
 
 
         <div class="container profile-container">
-            <hr>
-            <h1 class="text-center">Order Details</h1>
+            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title"><span>My Orders</span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
             <hr>
             <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
                 <div><a href="/profile">Profile</a></div>
                 <div><a href="/profileChangePassword">Change Password</a></div>
                 <div><a href="/addAddress">Add address</a></div>
                 <div><a href="/myAddress">My address</a></div>
-                <div class="btn btn-light active"><a href="#">All orders</a></div>
+                <div class="btn btn-light active"><a href="#">My Orders</a></div>
             </div>
             <hr>
             <div class="col-lg-12">
@@ -44,7 +47,7 @@
                             <td class="product-col" style="justify-content: space-evenly;">
                                 <div class="product" style="justify-content: space-evenly;">
                                     <h3 class="product-title">
-                                        <a href="#"> <%= data.orderDate %> </a>
+                                        <a href="#"> <%= data.formattedDate %> </a>
                                     </h3><!-- End .product-title -->
                                 </div><!-- End .product -->
                             </td>

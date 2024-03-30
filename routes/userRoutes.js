@@ -74,7 +74,8 @@ const {
     orderData,
     razorPayOrder,
     razorPayOrderSuccess,
-    getOrderSuccess
+    getOrderSuccess,
+    downloadInvoice
 } = require("../controllers/orderManagementController")
 
 
@@ -87,7 +88,7 @@ const {
 
 
 
-// ----------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------signUp / signIn----------------------------------------------------------
 
 router.get("/",isUserBlock,getLandingPage)
 
@@ -201,6 +202,8 @@ router.post("/razorPayOrder",isUserBlock,isUserActive,razorPayOrder)
 router.all("/order/orderPlaced",isUserBlock,isUserActive,razorPayOrderSuccess)
 
 router.get("/orderSuccess",isUserBlock,isUserActive,getOrderSuccess)
+
+router.get("/downloadInvoice:id",isUserBlock,isUserActive,downloadInvoice)
 
 
 

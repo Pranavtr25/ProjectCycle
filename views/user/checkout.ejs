@@ -28,7 +28,6 @@
 
             			</div><!-- End .checkout-discount -->
 
-                        <hr>
                         <div class="onepage-checkout col-lg-12">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                               <div class="panel panel-default">
@@ -37,26 +36,24 @@
                                     <a role="button" data-toggle="collapse" data-parent="#accordion"
                                       href="#BillingInformation" aria-expanded="true"
                                       aria-controls="BillingInformation">
-                                      <button type="button" class="btn btn-primary">Choose Address</button>
+                                      <!-- <button type="button" class="btn btn-primary">Choose Address</button> -->
 
                                     </a>
                                   </p>
                                 </div>
-                                <div id="BillingInformation" class="panel-collapse collapse in" role="tabpanel"
+                                <!-- <div id="BillingInformation" class="panel-collapse collapse in" role="tabpanel"
                                   aria-labelledby="BillingInformation" style="float: left; width: 50%;">
                                   <div class="panel-body">
-                                    <div style="clear: both"></div>
+                                    <div style="clear: both"></div> -->
                                     <!-- Address Choosing Section -->
                                     <div class="form-group required maxwidth300">
                                         <hr>
-                                      <label for="SelectAddress">Select Address <sup>*</sup></label>
-                                        <select class="form-control" required aria-required="true" id="SelectAddress" name="chosenAddress">
-                                            <option selected disabled>select</option>
+                                      <label for="SelectAddress"> <b>Select Address </b><sup>*</sup></label>
+                                      <br>
                                             <% addressData.reverse().forEach(data => { %>
-                                                <option value="<%= data._id %>"><%= data.name %></option>
+                                                <input type="radio" id="SelectAddress" name="chosenAddress" value="<%= data._id %>">
+                                                <label for="address"><%= data.name %> , <%= data.city %> . . .</label><br>
                                             <% }); %>
-                                        </select>
-
                                       <br>
                                       
                                       <a href="/addAddress"><button class="btn btn-outline-primary-2">Add Address</button></a>
@@ -70,8 +67,8 @@
                                     <!-- End of Address Choosing Section -->
                                     <!-- Other Checkout Sections -->
                                     <!-- Add your other checkout sections here -->
-                                  </div>
-                                </div>
+                                  <!-- </div>
+                                </div> -->
 
                               </div>
                             </div>
@@ -79,12 +76,7 @@
                           </div>
 
 
-                          <br>
-                          <br>
-                          <br>
-                          <br>
-                          <br>
-                          <br>
+                          
                           
                           <hr>
 
@@ -551,13 +543,23 @@
         
         const paymentTypeValue = paymentType?.value ?? null
          
-        const selectAddress = document.querySelector('#SelectAddress');
+        // const selectAddress = document.querySelector('#SelectAddress');
+        const selectAddress = document.querySelector('input[name="chosenAddress"]:checked');
 
-        const selectAddressValue = selectAddress.value;
+        const selectAddressValue = selectAddress ? selectAddress.value : null;
 
-        console.log(paymentTypeValue)
+        console.log(selectAddressValue)
+        console.log(Number(grandTotalCheckout))
 
-        if(selectAddressValue==="select"){
+        if(Number(grandTotalCheckout)===0){
+            return await Swal.fire({
+                title: "sorry",
+                text: "Checkout is Empty",
+                icon: "error",
+                })
+        }
+
+        if(selectAddressValue===null){
             return await Swal.fire({
                 title: "sorry",
                 text: "Select the address",
@@ -565,6 +567,13 @@
                 })
         }
         if(paymentTypeValue){
+            if(paymentTypeValue=="Cash on delivery" && Number(grandTotalCheckout) > 20000){
+                return await Swal.fire({
+                title: "sorry",
+                text: "Limit for COD is exceeded",
+                icon: "error",
+                })
+            }
             if(paymentTypeValue=="Cash on delivery" || paymentTypeValue =="Wallet"){
                 let data={
                     grandTotalCheckout,

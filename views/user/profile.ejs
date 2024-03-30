@@ -15,37 +15,173 @@
     padding: 20px; /* Optional: Add padding for spacing */
 }
 
+        header, footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .orders-container {
+            /* width: 100%; */
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px; /* Added margin-bottom to provide space at the bottom */
+        }
+
+        h1, h2 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        .order-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .order-item:hover {
+            transform: scale(1.05);
+        }
+
+        .order-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .order-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .wallet-credit {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .wallet-debit {
+            font-weight: bold;
+            color: #d60000;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
 
 </style>
 
 
         <div class="container profile-container">
-            <hr>
-            <h1 class="text-center">Profile</h1>
+            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title"><span>Profile</span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
             <hr>
             <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
                 <div class="btn btn-light active"><a href="#">Profile</a></div>
                 <div><a href="/profileChangePassword">Change Password</a></div>
                 <div><a href="/addAddress">Add address</a></div>
                 <div><a href="/myAddress">My address</a></div>
-                <div><a href="/profile/userOrders">All orders</a></div>
+                <div><a href="/profile/userOrders">My Orders</a></div>
             </div>
             <hr>
-    
-            <div class="user-details">
-                <div>
-                    <h2><%= userData.userName %></h2>
-                    <p><strong>Mobile No :</strong> <%= userData.phoneNumber %></p>
-                    <p><strong>Email :</strong> <%= userData.email %></p>
-                    <p><strong>Wallet Amount :</strong> ₹<%= walletData?.walletBalance ?? 0%></p>
-                    <div class="form-group">
-                        <label for="referralCode"><strong>Referral Code :</strong></label>
-                        <input type="text" class="form-control" id="referralText" aria-describedby="emailHelp" value="http://localhost:3000/signup?referralCode=<%= (userData?.referralCode)?.toLowerCase() %>" disabled>
-                        <br>
-                        <button type="submit" id="copyReferral" class="btn btn-primary">Copy</button>
+
+            <div style="display: flex;">
+
+                <div class="orders-container" style="flex: 1; margin-right: 2em;">
+                    <div class="order-item">
+                        <div class="order-content" style="padding: 20px;">
+                            <h2><%= userData.userName %></h2>
+                            <div class="order-info" style="margin-bottom: 20px;">
+                                <p><strong>Mobile No:</strong> <%= userData.phoneNumber %></p>
+                                <p><strong>Email:</strong> <%= userData.email %></p>
+                            </div>
+                            <div class="text-center" style="margin-bottom: 20px;">
+                                <a href="/editProfile" class="btn btn-outline-primary-2">
+                                    <span>Edit</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </a>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label for="referralCode"><strong>Referral Code:</strong></label>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="text" class="form-control" id="referralText" aria-describedby="emailHelp" value="http://localhost:3000/signup?referralCode=<%= (userData?.referralCode)?.toLowerCase() %>" disabled>
+                                    <button type="submit" id="copyReferral" class="btn btn-primary" style="margin-left: 10px;">Copy</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+            
+                <div class="orders-container" style="flex: 1; margin-right: 2em;">
+                    <h2>Wallet Transactions</h2>
+                    <div class="order-item">
+                        <div class="order-content">
+                            <div>
+                                <h2 class="order-title">Wallet Balance : ₹<%= walletData?.walletBalance ?? 0%></h2>
+                                <div class="order-info" style="display: flex; justify-content: space-around;">
+                                    <div style="margin-right: 20px;">
+                                        <p><strong>Credits :</strong></p>
+                                        <% walletData?.walletCreditTransaction.forEach(data => { %>
+                                        <p class="wallet-credit"> ₹ <%= data.transactionAmount %> </p>
+                                        <p><%= data?.transactionType %></p>
+                                        <% }); %>
+                                    </div>
+                
+                                    <div>
+                                        <p><strong>Debits :</strong></p>
+                                        <% walletData?.walletDebitTransaction.forEach(data => { %>
+                                        <p class="wallet-debit"> ₹ <%= data.transactionAmount %> </p>
+                                        <p> <%= data?.transactionType %></p>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            
             </div>
+            
+            
+            
+            
+    
             
 
     
@@ -82,12 +218,7 @@
                 </div>
             </div> -->
         
-            <div class="text-center">
-                <a href="/editProfile" class="btn btn-outline-primary-2">
-                    <span>Edit</span>
-                    <i class="icon-long-arrow-right"></i>
-                </a>
-            </div>
+            
         </div>
 
 

@@ -5,6 +5,8 @@ const orderModel =require("../model/orderModel");
 const razorPay = require("razorpay")
 const walletCollection = require("../model/walletModel")
 const { deleteMany } = require("../model/userModel");
+const wishlistCollection = require("../model/wishlistModel")
+const { generatevoice } = require("../services/generatePDF");
 const dotenv=require("dotenv")
 dotenv.config();
 
@@ -154,9 +156,33 @@ const getOrderSuccess = async (req,res)=>{
         console.log(cartData)
         const orderNumber = req.session?.orderNumber;
         const orderData = await orderModel.findOne({userId:req.session.userData._id,orderNumber:orderNumber})
-        res.render("user/orderSuccess",{userData:req.session.userData,cartData,orderData})
+        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
+        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/orderSuccess",{userData:req.session.userData,cartData,orderData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
     } catch (error) {
         console.error(`error while getting the getting the order success page \n ${error}`);
+    }
+}
+
+
+const downloadInvoice = async (req,res)=>{
+    try {
+        let orderDetails = await orderModel
+        .findOne({ _id: req.params.id })
+        .populate("addressChosen");
+    
+      const stream = res.writeHead(200, {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": "attachment;filename=invoice.pdf",
+      });
+      generatevoice(
+        (chunk) => stream.write(chunk),
+        () => stream.end(),
+        orderDetails
+      );
+      console.log(generatevoice);
+    } catch (error) {
+        console.error(`error while downloading the invoice \n ${error}`);
     }
 }
 
@@ -168,5 +194,6 @@ module.exports={
     orderData,
     getOrderSuccess,
     razorPayOrderSuccess,
-    razorPayOrder
+    razorPayOrder,
+    downloadInvoice
 }

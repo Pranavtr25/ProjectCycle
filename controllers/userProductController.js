@@ -1,12 +1,15 @@
 const productModel = require("../model/productModel.js");
 const categoryModel = require("../model/categoryModel.js");
 const cartModel = require("../model/cartModel.js");
+const wishlistCollection = require("../model/wishlistModel.js")
 
 const getUserProduct=async (req,res)=>{
     try {
-        let limit=4;
 
-      
+
+        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
+        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        let limit=4;
         let page=req.query.page || 1
         let skip=(page-1)*limit;
 
@@ -82,7 +85,7 @@ const getUserProduct=async (req,res)=>{
 
            console.log(categoryFilterName)
 
-            res.render("user/productList",{productData,userData,count,categoryData,priceSelect,categoryFilterName})
+            res.render("user/productList",{productData,userData,count,categoryData,priceSelect,categoryFilterName,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
 
 
         }else{
@@ -125,7 +128,7 @@ const getUserProduct=async (req,res)=>{
         }
         console.log(productData);
 
-        res.render("user/productList",{productData,userData,count,categoryData,priceSelect,categoryFilterName:false})
+        res.render("user/productList",{productData,userData,count,categoryData,priceSelect,categoryFilterName:false,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
 
         }
               
@@ -133,10 +136,6 @@ const getUserProduct=async (req,res)=>{
         console.error(`error while getting the user products \n ${error}`);
     }
 }
-
-
-
-
 
 
 
@@ -265,8 +264,9 @@ const getSingleProduct= async (req,res)=>{
         const productQuantity= cartProductData?.productQuantity || 0
         console.log(productQuantity)
         console.log(cartProductData)
-    
-        res.render("user/singleProduct",{productData,userData,relatedProductData,productQuantity});
+        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
+        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/singleProduct",{productData,userData,relatedProductData,productQuantity,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount});
     } catch (error) {
         console.error(`error while getting the single product page \n ${error}`);
     }
