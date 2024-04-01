@@ -18,6 +18,7 @@ async function productStockMaintain (cartData){
         dec = data.productQuantity
         await productModel.findByIdAndUpdate({_id:id},{$inc:{"productStock":-dec}})
         await productModel.findByIdAndUpdate({_id:id},{$inc:{stockSold:dec}})
+        await categoryModel.updateOne({categoryName:data.productId?.parentCategory},{$inc:{stockSold:data.productQuantity}})
     })
 }
 
@@ -73,11 +74,13 @@ const orderData = async (req,res)=>{
         await orderModel(data).save();
 
         const decProductData = JSON.stringify(cartValue)
-
+        console.log(1)
        await cartValue.forEach(async data=>{
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:-data.productQuantity}})
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{stockSold:data.productQuantity}})
+            await categoryModel.updateOne({categoryName:data.productId?.parentCategory},{$inc:{stockSold:data.productQuantity}})
         })
+        console.log(2)
             await cartModel.deleteMany({userId:req.session?.userData?._id});
 
         req.session.newGrandTotal = null;

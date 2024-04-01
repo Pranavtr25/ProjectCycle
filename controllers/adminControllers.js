@@ -1,6 +1,7 @@
 const userModel = require("../model/userModel");
 const dashboard = require("../services/dashboardChart")
 const productModel = require("../model/productModel");
+const categoryModel = require("../model/categoryModel")
 
 const getAdminLogin = async (req, res) => {
   console.log("Admin");
@@ -54,7 +55,14 @@ const getAdminHome = async(req,res)=>{
       productData = [];
     }
 
-    res.render("admin/dashboard",{productData})
+    let categoryData = req.session?.shopCategoryData ||
+      (await categoryModel.find({isListed:true}))
+
+    if(!categoryData){
+      categoryData = [];
+    }
+
+    res.render("admin/dashboard",{productData,categoryData})
   } catch (error) {
     console.error(`error while getting the admin home \n ${error}`);
   }
@@ -106,7 +114,6 @@ const bestSellingAscending = async (req,res)=>{
     .find({ isListed: true })
     .sort({ stockSold: 1 }).limit(10);
   res.json({ success: true });
-  console.log(".........",req.session.shopProductData)
   } catch (error) {
     console.error(`error while sorting best Selling in Ascending \n ${error} `);
   }
@@ -116,10 +123,32 @@ const bestSellingDescending = async (req,res)=>{
   try {
     req.session.shopProductData = await productModel
       .find({ isListed: true })
-      .sort({ stockSold: -1 });
-    res.json({ success: true }).limit(10);
+      .sort({ stockSold: -1 }).limit(10);
+    res.json({ success: true });
   } catch (error) {
     console.error(`error while sorting best selling in descending \n ${error}`);
+  }
+}
+
+const bestSellingAscendingCategory = async (req,res)=>{
+  try {
+    req.session.shopCategoryData = await categoryModel
+      .find({ isListed: true })
+      .sort({ stockSold: 1 }).limit(10);
+    res.json({ success: true });
+  } catch (error) {
+    console.error(`error while sorting best selling category low to high \n ${error}`);
+  }
+}
+
+const bestSellingDescendingCategory = async (req,res)=>{
+  try {
+    req.session.shopCategoryData = await categoryModel
+    .find({ isListed: true })
+    .sort({ stockSold: -1 }).limit(10);
+  res.json({ success: true });
+  } catch (error) {
+    console.error(`error while sorting the best selling category high to low \n ${error} `);
   }
 }
 
@@ -197,6 +226,8 @@ module.exports = {
   dashboardData,
   bestSellingAscending,
   bestSellingDescending,
+  bestSellingAscendingCategory,
+  bestSellingDescendingCategory,
   getUserManagement,
   blockUser,
   unBlockUser,

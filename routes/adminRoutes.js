@@ -10,6 +10,8 @@ const {
     dashboardData,
     bestSellingAscending,
     bestSellingDescending,
+    bestSellingAscendingCategory,
+    bestSellingDescendingCategory,
     getUserManagement,
     blockUser,
     unBlockUser,
@@ -88,6 +90,10 @@ router.get("/dashboardData",isAdminActive,dashboardData)
 router.get("/admin/sort/bestSellingAscending",isAdminActive,bestSellingAscending)
 
 router.get("/admin/sort/bestSellingDescending",isAdminActive,bestSellingDescending)
+
+router.get("/admin/sort/category/bestSellingAscendingCategory",isAdminActive,bestSellingAscendingCategory)
+
+router.get("/admin/sort/category/bestSellingDescendingCategory",isAdminActive,bestSellingDescendingCategory)
 
 router.get("/adminHome",isAdminActive,getAdminHome)
 

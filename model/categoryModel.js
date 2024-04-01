@@ -12,6 +12,10 @@ const categorySchema= new mongoose.Schema({
     isListed: {
         type: Boolean,
         default: true
+    },
+    stockSold: {
+        type: Number,
+        default: 0
     }
 })
 
