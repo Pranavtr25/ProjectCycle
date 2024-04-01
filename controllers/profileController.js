@@ -17,20 +17,23 @@ const getProfile = async (req,res)=>{
         console.log(`=====================${req.session.userData._id}`)
         const walletData= await walletCollection.findOne({userId:req.session?.userData?._id})
         console.log(`walletData ............. \n ${walletData}`)
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/profile",{userData,walletData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/profile",{userData,walletData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the profile page \n ${error}`);
     }
 }
 
+
 const getEditProfile=async (req,res)=>{
     try {
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
         const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/editProfile",{userData,wishlistCount:req.session?.wishlistCount,cartCount})
+        res.render("user/editProfile",{userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the edit profile page \n ${error}`);
     }
@@ -71,10 +74,11 @@ const editProfileData = async (req,res)=>{
 
 const getAddAddress= async (req,res)=>{
     try {
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        res.render("user/addAddress",{userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        res.render("user/addAddress",{userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the getting the add address page \n ${error}`);
     }
@@ -106,9 +110,10 @@ const getEditAddress = async (req,res)=>{
         const addressData = await AddressModel.findById({_id:addressId})
         console.log(addressData)
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/editAddress",{addressData,userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/editAddress",{addressData,userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the edit address page \n ${error}`);
     }
@@ -150,9 +155,10 @@ const getMyAddress=async (req,res)=>{
         const userData=await userModel.findById({_id:req.session?.userData?._id})
         const addressData=await AddressModel.find({user_id:userData._id})
         console.log(`addressdata is \n ${addressData}`)
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/myAddress",{addressData,userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/myAddress",{addressData,userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the my address page \n ${error}`);
     }
@@ -161,9 +167,10 @@ const getMyAddress=async (req,res)=>{
 const getProfileOTP = async (req,res)=>{
     try {
         req.session.isWrongProfileOTP
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/profileOTPVerify",{isWrongProfileOTP:req.session.isWrongProfileOTP,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/profileOTPVerify",{isWrongProfileOTP:req.session.isWrongProfileOTP,wishlistCount,cartCount})
         req.session.isWrongProfileOTP=false;
     } catch (error) {
         console.error(`error while getting the profile otp page \n ${error}`);
@@ -202,9 +209,10 @@ const profileOTPVerification = async (req,res)=>{
 const getProfileChangePassword= async (req,res)=>{
     try {
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/profileChangePassword",{userData,cartCount:req.session?.cartCount,wishlistCount:req.session?.wishlistCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/profileChangePassword",{userData,cartCount,wishlistCount})
     } catch (error) {
         console.error(`error while getting profile change password \n ${error}`);
     }
@@ -244,7 +252,7 @@ const getuserOrders = async (req,res)=>{
         let orderData;
         let page=Number(req.query.page) || 1
         skip=(page-1)*limit
-        let totalCount=await orderModel.find().estimatedDocumentCount()
+        let totalCount=await orderModel.find({userId:req.session?.userData?._id}).countDocuments()
         count=totalCount/limit;
         orderData= await orderModel.find({userId:req.session?.userData?._id}).skip(skip).limit(limit)
         console.log("............................................................................")
@@ -260,9 +268,10 @@ const getuserOrders = async (req,res)=>{
         // });
         // console.log(orderData)
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/userOrdersList",{orderData,limit,count,userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/userOrdersList",{orderData,limit,count,userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the user order list \n ${error}`);
     }
@@ -275,9 +284,10 @@ const getUserSingleOrder = async (req,res)=>{
         console.log(`---------------------------------------`)
         console.log(orderData)
         console.log(`---------------------------------------`)
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/userSingleOrder",{orderData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/userSingleOrder",{orderData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the user single order page \n ${error}`);
     }

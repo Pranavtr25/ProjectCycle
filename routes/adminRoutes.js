@@ -7,6 +7,9 @@ const {
     getAdminLogin,
     validateAdmin,
     getAdminHome,
+    dashboardData,
+    bestSellingAscending,
+    bestSellingDescending,
     getUserManagement,
     blockUser,
     unBlockUser,
@@ -79,6 +82,12 @@ const {
 router.get("/adminLogin",getAdminLogin)
 
 router.post("/adminValidate",validateAdmin)
+
+router.get("/dashboardData",isAdminActive,dashboardData)
+
+router.get("/admin/sort/bestSellingAscending",isAdminActive,bestSellingAscending)
+
+router.get("/admin/sort/bestSellingDescending",isAdminActive,bestSellingDescending)
 
 router.get("/adminHome",isAdminActive,getAdminHome)
 

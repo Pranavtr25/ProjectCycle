@@ -1,4 +1,6 @@
 const userModel = require("../model/userModel");
+const dashboard = require("../services/dashboardChart")
+const productModel = require("../model/productModel");
 
 const getAdminLogin = async (req, res) => {
   console.log("Admin");
@@ -42,14 +44,84 @@ const validateAdmin = async (req, res) => {
   }
 };
 
-const getAdminHome = async (req, res) => {
-  if (req.session.admin) {
-    res.render("admin/adminDashboard");
-  } else {
-    console.log("session not work");
-    res.redirect("/adminLogin");
+const getAdminHome = async(req,res)=>{
+  try {
+    let productData =
+      req.session?.shopProductData ||
+      (await productModel.find({ isListed: true }));
+
+    if (!productData) {
+      productData = [];
+    }
+
+    res.render("admin/dashboard",{productData})
+  } catch (error) {
+    console.error(`error while getting the admin home \n ${error}`);
+  }
+}
+
+
+
+const dashboardData = async (req, res) => {
+  try {
+    const [
+      productsCount,
+      categoryCount,
+      pendingOrdersCount,
+      completedOrdersCount,
+      currentDayRevenue,
+      MonthlyRevenue,
+      categoryWiseRevenue,
+      shipping,
+    ] = await Promise.all([
+      dashboard.productsCount(),
+      dashboard.categoryCount(),
+      dashboard.pendingOrdersCount(),
+      dashboard.completedOrdersCount(),
+      dashboard.currentDayRevenue(),
+      dashboard.MonthlyRevenue(),
+      dashboard.categoryWiseRevenue(),
+      dashboard.shipping(),
+    ]);
+
+    const data = {
+      productsCount,
+      categoryCount,
+      pendingOrdersCount,
+      completedOrdersCount,
+      currentDayRevenue,
+      MonthlyRevenue,
+      categoryWiseRevenue,
+      shipping,
+    };
+    res.json(data);
+  } catch (error) {
+    console.log(error);
   }
 };
+
+const bestSellingAscending = async (req,res)=>{
+  try {
+    req.session.shopProductData = await productModel
+    .find({ isListed: true })
+    .sort({ stockSold: 1 }).limit(10);
+  res.json({ success: true });
+  console.log(".........",req.session.shopProductData)
+  } catch (error) {
+    console.error(`error while sorting best Selling in Ascending \n ${error} `);
+  }
+}
+
+const bestSellingDescending = async (req,res)=>{
+  try {
+    req.session.shopProductData = await productModel
+      .find({ isListed: true })
+      .sort({ stockSold: -1 });
+    res.json({ success: true }).limit(10);
+  } catch (error) {
+    console.error(`error while sorting best selling in descending \n ${error}`);
+  }
+}
 
 const getUserManagement = async (req, res) => {
   try {
@@ -122,8 +194,11 @@ module.exports = {
   getAdminLogin,
   validateAdmin,
   getAdminHome,
+  dashboardData,
+  bestSellingAscending,
+  bestSellingDescending,
   getUserManagement,
   blockUser,
   unBlockUser,
-  adminLogout,
+  adminLogout
 };

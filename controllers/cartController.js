@@ -38,15 +38,16 @@ async function grandTotal(req) {
 
 const getCart = async (req, res) => {
   try {
-    // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-    // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+    const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+    const wishlistCount = wishlistDetails?.wishlistProducts.length;
+    const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
     let userCartData = await grandTotal(req);
     res.render("user/cart",{
         userData:req.session.userData,
         userCartData,
         grandTotal:req.session.grandTotal,
-        wishlistCount:req.session?.wishlistCount,
-        cartCount:req.session?.cartCount
+        wishlistCount,
+        cartCount
     });
   } catch (error) {
     console.error(`error while getting the cart page \n ${error}`);
@@ -80,7 +81,6 @@ const addToCart = async (req, res) => {
         },
       ]);
       const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-      req.session.cartCount = cartCount;
       res.status(200).send({success:true})
     }
 

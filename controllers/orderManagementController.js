@@ -14,9 +14,10 @@ dotenv.config();
 async function productStockMaintain (cartData){
     console.log(`cartData : ${JSON.stringify(cartData)}`)
     await cartData.forEach(async(data)=>{
-        id = data.productId._id
+        id = data.productId?._id
         dec = data.productQuantity
         await productModel.findByIdAndUpdate({_id:id},{$inc:{"productStock":-dec}})
+        await productModel.findByIdAndUpdate({_id:id},{$inc:{stockSold:dec}})
     })
 }
 
@@ -75,8 +76,12 @@ const orderData = async (req,res)=>{
 
        await cartValue.forEach(async data=>{
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:-data.productQuantity}})
+            await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{stockSold:data.productQuantity}})
         })
             await cartModel.deleteMany({userId:req.session?.userData?._id});
+
+        req.session.newGrandTotal = null;
+        req.session.couponTotal = null;    
 
         return res.status(200).send({success:true})
 
@@ -141,6 +146,9 @@ const razorPayOrderSuccess = async (req,res)=>{
 
         await cartModel.deleteMany({userId:userId})
 
+        req.session.newGrandTotal = null;
+        req.session.couponTotal = null;
+
         res.status(401).redirect("/orderSuccess")
 
     } catch (error) {
@@ -156,9 +164,10 @@ const getOrderSuccess = async (req,res)=>{
         console.log(cartData)
         const orderNumber = req.session?.orderNumber;
         const orderData = await orderModel.findOne({userId:req.session.userData._id,orderNumber:orderNumber})
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/orderSuccess",{userData:req.session.userData,cartData,orderData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        res.render("user/orderSuccess",{userData:req.session.userData,cartData,orderData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the getting the order success page \n ${error}`);
     }

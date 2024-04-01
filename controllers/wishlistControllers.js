@@ -12,11 +12,12 @@ const getWishlist = async (req,res)=>{
         const userData= req.session.userData;
         const wishlistData = await wishlistCollection.findOne({userId:userData._id}).populate("wishlistProducts.productId")
         console.log(wishlistData)
-        // const wishlistCount = await wishlistCollection.find({userId:req.session?.userData?._id}).countDocuments();
-        // const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
+        const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
         // const cartProductData=await cartModel.findOne({userId:userData._id,productId:id})
         // const productQuantity= cartProductData?.productQuantity || 0
-        res.render("user/wishlist",{wishlistData,userData,wishlistCount:req.session?.wishlistCount,cartCount:req.session?.cartCount})
+        res.render("user/wishlist",{wishlistData,userData,wishlistCount,cartCount})
     } catch (error) {
         console.error(`error while getting the wishlist page \n ${error}`);
     }
@@ -47,10 +48,9 @@ const addWishlistData = async (req,res)=>{
             }
             await wishlistCollection(userWishlistData).save()
         }
-        const wishlistDataNew = await wishlistCollection.findOne({userId:userData?._id});
-        const wishlistCount = wishlistDataNew?.wishlistProducts.length;
+        const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
+        const wishlistCount = wishlistDetails?.wishlistProducts.length;
         console.log(`updated wishlist count................... ${wishlistCount}.`)
-        req.session.wishlistCount = wishlistCount
         res.status(200).send({success:true,wishlistAlreadyExist:false})
             
     } catch (error) {
@@ -86,7 +86,6 @@ const addToCartFromWishlist = async (req,res)=>{
               }
               await cartModel(cartData).save()
             const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-            req.session.cartCount = cartCount;
             res.status(200).send({success:true})
         }
         console.log(cartData)

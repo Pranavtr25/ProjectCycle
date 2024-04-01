@@ -66,7 +66,8 @@ const {
 
 
 const {
-    getCheckout
+    getCheckout,
+    applyCoupon
 }=require("../controllers/checkoutController")
 
 
@@ -191,6 +192,8 @@ router.get("/profile/cancelReturnOrder:id",isUserBlock,isUserActive,cancelReturn
 // -----------------------------------------------------------checkout-----------------------------------------------
 
 router.get("/checkout",isUserBlock,isUserActive,getCheckout)
+
+router.post("/applyCoupon",isUserBlock,isUserActive,applyCoupon)
 
 
 // -----------------------------------------------------------order management---------------------------------------
