@@ -85,7 +85,6 @@ const getEditProduct=async (req,res)=>{
     const productId = req.params.id;
     const productData = await productModel.findOne({ _id: productId });
     const categories = await categoryModel.find({});
-    // console.log(categories);
     req.session.productAlreadyExists
     res.render("admin/editProduct", {
       productData,
@@ -100,16 +99,12 @@ const getEditProduct=async (req,res)=>{
 }
 
 const editProductData=async (req,res)=>{
-    console.log("edit");
     try {
       let existingProduct = await productModel.findOne({
         productName: { $regex: new RegExp(`^${req.body.productName}$`, "i") },
     
       });
       if (!existingProduct || existingProduct._id == req.params.id) {
-        console.log("edit1");
-  console.log(req.body.productName);
-//   console.log(req.files[0]);
         const updateFields = {
           $set: {
             productName: req.body.productName,
@@ -136,9 +131,7 @@ const editProductData=async (req,res)=>{
         await productModel.findOneAndUpdate(
           { _id: req.params.id },
           updateFields
-        );
-        console.log("edit3");
-  
+        );  
         res.redirect("/productsList");
       } else {
         req.session.productAlreadyExists = existingProduct;

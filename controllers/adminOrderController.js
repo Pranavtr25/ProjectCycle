@@ -14,7 +14,7 @@ const getOrderList = async (req,res)=>{
         let totalCount=await orderModel.find().estimatedDocumentCount()
         count=totalCount/limit;
         // productData=await productModel.find().skip(skip).limit(limit)
-        orderData = await orderModel.find().populate("userId").skip(skip).limit(limit)
+        orderData = await orderModel.find().sort({ orderNumber: -1 }).populate("userId").skip(skip).limit(limit)
         console.log(orderData)
         res.render("admin/orderList",{orderData,limit,count})
     } catch (error) {

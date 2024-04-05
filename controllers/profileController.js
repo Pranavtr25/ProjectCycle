@@ -254,7 +254,8 @@ const getuserOrders = async (req,res)=>{
         skip=(page-1)*limit
         let totalCount=await orderModel.find({userId:req.session?.userData?._id}).countDocuments()
         count=totalCount/limit;
-        orderData= await orderModel.find({userId:req.session?.userData?._id}).skip(skip).limit(limit)
+        orderData= await orderModel.find({userId:req.session?.userData?._id}).sort({ orderNumber: -1 }).skip(skip).limit(limit)
+        
         console.log("............................................................................")
         console.log(orderData)
         console.log("............................................................................")

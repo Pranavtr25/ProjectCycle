@@ -20,7 +20,6 @@
                                     <input type="text" class="form-control" id="productName"
                                         value="<%= productData.productName %>" name="productName" />
                                 </div>
-                                <%= console.log(productData.productName); %>
 
                                    
                                     <div>
@@ -36,7 +35,7 @@
                                             <div class="col-md-6">
                                                 <div class="input-group">
                                                     <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
-                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage1(event)" />
+                                                    <input name="productImage1" id="productImage1" type="file" accept="image/*" class="d-none" onchange="displayImage1()" />
                                                 </div>
                                             </div>
                                         </div>
@@ -47,7 +46,7 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-6">
                                                 <div class="d-flex align-items-center mb-3">
-                                                    <img src="/images/<%= productData.productImage2 %>" alt="image 1" id="preview1" style="width: 100px; height: 100px; margin-right: 10px;" />
+                                                    <img src="/images/<%= productData.productImage2 %>" alt="image 2" id="preview2" style="width: 100px; height: 100px; margin-right: 10px;" />
                                                     <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(2, this)">Delete</button>
                                                 </div>
                                             </div>
@@ -55,8 +54,8 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-6">
                                                 <div class="input-group">
-                                                    <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
-                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage2(event)" />
+                                                    <label for="productImage2" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
+                                                    <input name="productImage2" id="productImage2" type="file" accept="image/*" class="d-none" onchange="displayImage2()" />
                                                 </div>
                                             </div>
                                         </div>
@@ -67,7 +66,7 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-6">
                                                 <div class="d-flex align-items-center mb-3">
-                                                    <img src="/images/<%= productData.productImage3 %>" alt="image 1" id="preview1" style="width: 100px; height: 100px; margin-right: 10px;" />
+                                                    <img src="/images/<%= productData.productImage3 %>" alt="image 3" id="preview3" style="width: 100px; height: 100px; margin-right: 10px;" />
                                                     <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(3, this)">Delete</button>
                                                 </div>
                                             </div>
@@ -75,8 +74,8 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-6">
                                                 <div class="input-group">
-                                                    <label for="productImage1" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
-                                                    <input name="productImage1" id="productImage1" type="file" class="d-none" onchange="displayImage3(event)" />
+                                                    <label for="productImage3" class="form-control" style="width: 100%; cursor: pointer;">Choose file</label>
+                                                    <input name="productImage3" id="productImage3" type="file" accept="image/*" class="d-none" onchange="displayImage3()" />
                                                 </div>
                                             </div>
                                         </div>
@@ -94,7 +93,7 @@
                                         <input name="productStock" type="number" class="form-control"
                                             value="<%= productData.productStock %>" />
                                     </div>
-                                    <span>Select Parent Category</span>
+                                    <span>Select Category</span>
                                     <select name="parentCategory" class="form-select"
                                         aria-label="Default select example">
                                         <% categories.forEach(function(category) { %>
