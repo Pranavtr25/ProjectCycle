@@ -4,99 +4,105 @@
 
 <style>
 
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for user details */
 .user-details {
     display: flex;
     flex-direction: column;
-    text-align: center;
-    margin: auto; /* Center horizontally */
-    justify-content: center;
-    align-items: center; /* Center vertically */
-    max-width: 400px; /* Optional: Set a maximum width */
-    padding: 20px; /* Optional: Add padding for spacing */
+    align-items: center;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-        header, footer {
-            background-color: #343a40;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            width: 100%;
-        }
+/* Header and Footer Styles */
+header, footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
 
-        .orders-container {
-            /* width: 100%; */
-            background-color: #fff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 20px;
-            margin-bottom: 20px; /* Added margin-bottom to provide space at the bottom */
-        }
+/* Orders Container Styles */
+.orders-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
 
-        h1, h2 {
-            color: #007bff;
-            text-align: center;
-        }
+/* Heading Styles */
+h1, h2 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .order-details {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+/* Order Item Styles */
+.order-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    flex: 1 1 calc(50% - 20px); /* Two items per row */
+    max-width: 400px; /* Limit maximum width */
+}
 
-        .order-item {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out;
-        }
+.order-item:hover {
+    transform: scale(1.05);
+}
 
-        .order-item:hover {
-            transform: scale(1.05);
-        }
+/* Order Content Styles */
+.order-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-        .order-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+/* Order Title Styles */
+.order-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
-        .order-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+/* Order Info Styles */
+.order-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-        .order-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+/* Wallet Transaction Styles */
+.wallet-credit {
+    font-weight: bold;
+    color: #28a745;
+}
 
-        .order-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+.wallet-debit {
+    font-weight: bold;
+    color: #d60000;
+}
 
-        .wallet-credit {
-            font-weight: bold;
-            color: #28a745;
-        }
+/* Footer Styles */
+footer {
+    margin-top: auto;
+}
 
-        .wallet-debit {
-            font-weight: bold;
-            color: #d60000;
-        }
-
-        footer {
-            margin-top: auto;
-        }
 
 
 </style>
@@ -157,7 +163,8 @@
                                         <p><strong>Credits :</strong></p>
                                         <% walletData?.walletCreditTransaction.forEach(data => { %>
                                         <p class="wallet-credit"> ₹ <%= data.transactionAmount %> </p>
-                                        <p><%= data?.transactionType %></p>
+                                        <p><%= data?.formattedDate %></p>
+                                        <p><%= data?.message %></p>
                                         <% }); %>
                                     </div>
                 
@@ -165,7 +172,8 @@
                                         <p><strong>Debits :</strong></p>
                                         <% walletData?.walletDebitTransaction.forEach(data => { %>
                                         <p class="wallet-debit"> ₹ <%= data.transactionAmount %> </p>
-                                        <p> <%= data?.transactionType %></p>
+                                        <p> <%= data?.formattedDate %></p>
+                                        <p> <%= data?.message %></p>
                                         <% }); %>
                                     </div>
                                 </div>

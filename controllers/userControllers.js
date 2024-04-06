@@ -195,6 +195,13 @@ const signupOTPVerification = async (req, res) => {
         console.log(`==========--------------user referrral daatassssss : ${userReferral}`)
         if(userReferral){
            await walletCollection.updateOne({userId:userReferral._id},{$inc:{walletBalance:500}})
+            const saveWallet = {
+                transactionAmount : 500,
+                transactionType : "Referral",
+                message : "Referral Bonus"
+            }
+            const walletData = await walletCollection.findOne({userId:userReferral._id})    
+            const pushOrder = await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$push:{walletCreditTransaction:saveWallet}})
         }
         req.session.referralCode=null
       }

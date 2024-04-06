@@ -813,7 +813,6 @@
                 e.preventDefault();
 
             if (OTPInput.value.length === 6) {
-
                 let OTPValue = OTPInput.value;
                 const data = await fetch(`/signupOTPVerify${OTPValue}`,{
                                 method:"POST",
@@ -821,11 +820,10 @@
                                     "Content-Type":"application/json"
                                 },
                             })
-                
                 console.log(`fetch response : ${data}`)
 
                 const dataValue=await data.json()
-
+                
                 if(dataValue.success){
                     window.location.href="/"
                 }else{

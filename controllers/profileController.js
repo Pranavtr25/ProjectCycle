@@ -12,11 +12,18 @@ const moment = require("moment")
 
 const getProfile = async (req,res)=>{
     try {
-        // console.log(`profffffile dat : ${req.session?.userData?._id}`)
         const userData=await userModel.findById({_id:req.session?.userData?._id})
-        console.log(`=====================${req.session.userData._id}`)
         const walletData= await walletCollection.findOne({userId:req.session?.userData?._id})
-        console.log(`walletData ............. \n ${walletData}`)
+        walletData.walletCreditTransaction.forEach(data => {
+            let parsedDate = moment(data.transactionDate)
+            let formattedDate = parsedDate.format('YYYY-MM-DD hh:mm:ss A')
+            data.formattedDate = formattedDate
+        });
+        walletData.walletDebitTransaction.forEach(data => {
+            let parsedDate = moment(data.transactionDate)
+            let formattedDate = parsedDate.format('YYYY-MM-DD hh:mm:ss A')
+            data.formattedDate = formattedDate
+        });
         const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
         const wishlistCount = wishlistDetails?.wishlistProducts.length;
         const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
@@ -42,10 +49,8 @@ const getEditProfile=async (req,res)=>{
 const editProfileData = async (req,res)=>{
     try {
         const userData=await userModel.findById({_id:req.session.userData._id})
-        console.log(`this is the new userdata \n ${userData}`)
         const {userName,email,phoneNumber} = req.body
         if(email === userData.email){ 
-            console.log("this is workingggg.")         
            await userModel.updateOne(
                 {email:email},
                 {$set:{
@@ -304,36 +309,43 @@ const cancelReturnOrder = async (req,res)=>{
         console.log(`orderrrrrrrrrrrrrr: ${orderData}`)
         console.log(orderId)
         console.log(statusCode)
+        console.log("11")
         if(statusCode==="C"){
             await orderModel.findOneAndUpdate({_id:orderId},{$set:{orderStatus:"Cancelled"}})
         }else if(statusCode==="R"){
             await orderModel.findOneAndUpdate({_id:orderId},{$set:{orderStatus:"Returned"}})
         }
-
-        
+        console.log(22)
         orderData.cartData.forEach(async data => {
             await productModel.findByIdAndUpdate({_id:data.productId._id},{$inc:{productStock:data.productQuantity}})
         });
+        console.log(33)
+        if(!(statusCode==="C" && orderData.paymentType==="Cash on delivery") || statusCode==="R"){
+            
+            const transactionAmount = orderData?.grandTotalCost
+            const transactionType = orderData?.paymentType
+            let message=""
+            if (statusCode==="C") {
+                message = "Order Cancelled"
+            }else if(statusCode==="R"){
+                message = "Order Returned"
+            }
+            console.log("mesageeeeeeeeeeeeeeeeeeeeeeeeee",message)
+            const saveWallet = {
+                transactionAmount,
+                transactionType,
+                message
+            }
+        console.log(44)
+            const userId = req.session?.userData?._id   
+            const walletData = await walletCollection.findOne({userId:userId})    
+            const pushOrder = await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$push:{walletCreditTransaction:saveWallet}})
+            console.log(pushOrder)    
+            const walletNewAmount = walletData.walletBalance + orderData.grandTotalCost;   
+            await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$set:{walletBalance:walletNewAmount}})
 
-        const transactionAmount = orderData?.grandTotalCost
-        const transactionType = orderData?.paymentType
-
-        const saveWallet = {
-            transactionAmount,
-            transactionType
         }
-
-
-        const userId = req.session?.userData?._id
-
-        const walletData = await walletCollection.findOne({userId:userId})
-
-        const pushOrder = await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$push:{walletCreditTransaction:saveWallet}})
-
-        const walletNewAmount = walletData.walletBalance + orderData.grandTotalCost;
-
-        await walletCollection.findByIdAndUpdate({_id:walletData?._id},{$set:{walletBalance:walletNewAmount}})
-
+        console.log(55)
         res.redirect("/profile/userOrders")
     } catch (error) {
         console.error(`error while cancelling / returning the order \n ${error}`);
