@@ -13,6 +13,15 @@
             padding: 5px;
         }
 
+#addAddressValidation {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.responsive-table th.active{
+    background-color: #d9e4f0;
+}
+
 @media (max-width: 767px) {
         .responsive-table {
             justify-content: center;
@@ -36,7 +45,6 @@
         }
 
         .responsive-table th.active {
-            background-color: #007bff; /* Active column background color */
             color: #fff; /* Active column text color */
         }
     }
@@ -101,7 +109,7 @@
                 </tr>
             </table>
             <hr>
-            <form id="addAddressValidation" style="padding-left: 20rem; padding-right: 20rem;">
+            <form id="addAddressValidation">
                 <div class="form-group">
                   <label for="register-username">Name *</label>
                   <input

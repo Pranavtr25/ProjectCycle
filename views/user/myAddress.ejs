@@ -11,17 +11,35 @@
     }
 
     .addressItems{
-        width: 30em;
-        border: 1px solid #ebebeb;
-        padding: 40px 0px
+        background-color: #f9f9f9;
+        padding: 15px;
+        margin: 10px;
     }
 
     .addressItems:hover {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    .addressItems h2 {
+        margin-top: 0;
+    }
+
+    .addressItems p {
+        margin: 5px 0;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .button-group button {
+        flex: 1;
+        margin: 0 5px;
+    }
+
     .responsive-table th.active {
-        background-color: #bcc2c8; /* Active column background color */
+        background-color: #d9e4f0; /* Active column background color */
         color: #fff; /* Active column text color */
     }
 
@@ -55,8 +73,15 @@
         }
 
         .responsive-table th.active {
-            background-color: #007bff; /* Active column background color */
+            background-color: #d9e4f0; /* Active column background color */
             color: #fff; /* Active column text color */
+        }
+        .button-group {
+            flex-direction: column;
+        }
+
+        .button-group button {
+            margin: 5px 0;
         }
     }
 

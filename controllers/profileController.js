@@ -291,10 +291,14 @@ const getUserSingleOrder = async (req,res)=>{
         console.log(`---------------------------------------`)
         console.log(orderData)
         console.log(`---------------------------------------`)
+        let parsedDate = moment(orderData.orderDate)
+        let formattedDate = parsedDate.format('YYYY-MM-DD hh:mm:ss A')
+        orderData.formattedDate = formattedDate
         const wishlistDetails = await wishlistCollection.findOne({userId:req.session?.userData?._id})
         const wishlistCount = wishlistDetails?.wishlistProducts.length;
         const cartCount = await cartModel.find({userId:req.session?.userData?._id}).countDocuments();
-        res.render("user/userSingleOrder",{orderData,wishlistCount,cartCount})
+        const userData=await userModel.findById({_id:req.session?.userData?._id})
+        res.render("user/userSingleOrder",{orderData,wishlistCount,cartCount,userData})
     } catch (error) {
         console.error(`error while getting the user single order page \n ${error}`);
     }
