@@ -1,5 +1,21 @@
 <%- include('../userPartials/header') %>
 
+<style>
+
+@media (max-width: 767px) {
+    .pagination {
+        justify-content: center !important; /* Important to override other styles */
+        padding-left: 0 !important; /* Important to override other styles */
+        text-align: center; /* Align the text center */
+    }
+
+    .pagination li {
+        display: inline; /* Ensure list items are displayed inline */
+    }
+}
+
+</style>
+
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         		<div class="container">

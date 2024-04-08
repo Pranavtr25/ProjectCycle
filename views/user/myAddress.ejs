@@ -20,6 +20,43 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    .responsive-table th.active {
+        background-color: #bcc2c8; /* Active column background color */
+        color: #fff; /* Active column text color */
+    }
+
+    .responsive-table th {
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 767px) {
+        .responsive-table {
+            width: 100%;
+            display: block;
+        }
+
+        .responsive-table tr {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            margin-bottom: 10px;
+        }
+
+        .responsive-table th {
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .responsive-table th.active {
+            background-color: #007bff; /* Active column background color */
+            color: #fff; /* Active column text color */
+        }
+    }
+
 </style>
 
 
@@ -32,13 +69,33 @@
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <hr>
-            <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
+            <!-- <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
                 <div><a href="/profile">Profile</a></div>
                 <div><a href="/profileChangePassword">Change Password</a></div>
                 <div><a href="/addAddress">Add address</a></div>
                 <div class="btn btn-light active"><a href="/myAddress">My address</a></div>
                 <div><a href="/profile/userOrders">My Orders</a></div>
-            </div>
+            </div> -->
+
+            <table class="responsive-table" style="width: 100%;">
+                <tr style="display: flex; justify-content: space-evenly;">
+                    <th>
+                        <a href="/profile">Profile</a>
+                    </th>
+                    <th>
+                        <a href="/profileChangePassword">Change Password</a>
+                    </th>
+                    <th>
+                        <a href="/addAddress">Add address</a>
+                    </th>
+                    <th class="active">
+                        <a href="#">My address</a>
+                    </th>
+                    <th>
+                        <a href="/profile/userOrders">My Orders</a>
+                    </th>
+                </tr>
+            </table>
             <hr>
 
             <div class="user-details" id="userAddressValue">

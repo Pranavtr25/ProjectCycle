@@ -3,106 +3,123 @@
 
 
 <style>
+    /* body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    } */
 
-/* Global Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+    .container-profiledetails {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-/* Container for user details */
-.user-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    h1 {
+        text-align: center;
+        color: #333;
+    }
 
-/* Header and Footer Styles */
-header, footer {
-    background-color: #343a40;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
+    .transaction {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
 
-/* Orders Container Styles */
-.orders-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-}
+    .transaction .amount {
+        font-weight: bold;
+    }
 
-/* Heading Styles */
-h1, h2 {
+    .transaction .date {
+        font-size: 12px;
+        color: #777;
+    }
+
+    .transaction .description {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .user-details {
+        margin-bottom: 20px;
+    }
+
+    .user-details p {
+        margin: 5px 0;
+    }
+
+    .user-details strong {
+        font-weight: bold;
+    }
+
+    .credit-transactions h2,
+    .debit-transactions h2 {
+        font-size: 24px;
+        color: #007bff;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+    }
+
+    .container-profiledetails h1 {
+    font-size: 36px;
     color: #007bff;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
 }
 
-/* Order Item Styles */
-.order-item {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    flex: 1 1 calc(50% - 20px); /* Two items per row */
-    max-width: 400px; /* Limit maximum width */
-}
+    /* @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+    } */
 
-.order-item:hover {
-    transform: scale(1.05);
-}
+    .responsive-table th.active {
+        background-color: #bcc2c8; /* Active column background color */
+        color: #fff; /* Active column text color */
+    }
 
-/* Order Content Styles */
-.order-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+    .responsive-table th {
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+        }
 
-/* Order Title Styles */
-.order-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+/* Responsive styles */
+@media (max-width: 767px) {
+    .responsive-table {
+        width: 100%;
+        display: block;
+    }
 
-/* Order Info Styles */
-.order-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
+    .responsive-table tr {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        margin-bottom: 10px;
+    }
 
-/* Wallet Transaction Styles */
-.wallet-credit {
-    font-weight: bold;
-    color: #28a745;
-}
+    .responsive-table th {
+        width: 100%;
+        text-align: center;
+        padding: 5px;
+    }
 
-.wallet-debit {
-    font-weight: bold;
-    color: #d60000;
+    .responsive-table th.active {
+        background-color: #007bff; /* Active column background color */
+        color: #fff; /* Active column text color */
+    }
 }
-
-/* Footer Styles */
-footer {
-    margin-top: auto;
-}
-
 
 
 </style>
@@ -115,75 +132,113 @@ footer {
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <hr>
-            <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;">
-                <div class="btn btn-light active"><a href="#">Profile</a></div>
+            <!-- <div style="display: flex; flex-direction: row; text-align: center; justify-content: space-evenly;"> -->
+                <!-- <div class="btn btn-light active"><a href="#">Profile</a></div>
                 <div><a href="/profileChangePassword">Change Password</a></div>
                 <div><a href="/addAddress">Add address</a></div>
                 <div><a href="/myAddress">My address</a></div>
                 <div><a href="/profile/userOrders">My Orders</a></div>
-            </div>
+            </div> -->
+            <!-- <table style="width: 100%;">               
+                <tr style="display: flex; justify-content: space-evenly;">
+                    <th>
+                        <a href="#">Profile</a>
+                    </th>
+                    <th>
+                        <a href="/profileChangePassword">Change Password</a>
+                    </th>
+                    <th>
+                        <a href="/addAddress">Add address</a>
+                    </th>
+                    <th>
+                        <a href="/myAddress">My address</a>
+                    </th>
+                    <th>
+                        <a href="/profile/userOrders">My Orders</a>
+                    </th>
+                </tr>    
+            </table> -->
+            <table class="responsive-table" style="width: 100%;">
+                <tr style="display: flex; justify-content: space-evenly;">
+                    <th class="active">
+                        <a href="#">Profile</a>
+                    </th>
+                    <th>
+                        <a href="/profileChangePassword">Change Password</a>
+                    </th>
+                    <th>
+                        <a href="/addAddress">Add address</a>
+                    </th>
+                    <th>
+                        <a href="/myAddress">My address</a>
+                    </th>
+                    <th>
+                        <a href="/profile/userOrders">My Orders</a>
+                    </th>
+                </tr>
+            </table>
+            
             <hr>
 
-            <div style="display: flex;">
+            <div class="container-profiledetails">
+                <h1>User Profile</h1>
+                
+                <div class="user-details">
+                    <p><strong>Name : </strong> <%= userData.userName %></p>
+                    <p><strong>Phone : </strong> <%= userData.phoneNumber %></p>
+                    <p><strong>Email : </strong> <%= userData.email %></p>
+                    <div class="text-center" style="margin-bottom: 20px;">
+                        <a href="/editProfile" class="btn btn-outline-primary-2">
+                            <span>Edit</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </a>
+                    </div>
 
-                <div class="orders-container" style="flex: 1; margin-right: 2em;">
-                    <div class="order-item">
-                        <div class="order-content" style="padding: 20px;">
-                            <h2><%= userData.userName %></h2>
-                            <div class="order-info" style="margin-bottom: 20px;">
-                                <p><strong>Mobile No:</strong> <%= userData.phoneNumber %></p>
-                                <p><strong>Email:</strong> <%= userData.email %></p>
-                            </div>
-                            <div class="text-center" style="margin-bottom: 20px;">
-                                <a href="/editProfile" class="btn btn-outline-primary-2">
-                                    <span>Edit</span>
-                                    <i class="icon-long-arrow-right"></i>
-                                </a>
-                            </div>
-                            <div class="form-group" style="margin-top: 20px;">
-                                <label for="referralCode"><strong>Referral Code:</strong></label>
-                                <div style="display: flex; align-items: center;">
-                                    <input type="text" class="form-control" id="referralText" aria-describedby="emailHelp" value="http://localhost:3000/signup?referralCode=<%= (userData?.referralCode)?.toLowerCase() %>" disabled>
-                                    <button type="submit" id="copyReferral" class="btn btn-primary" style="margin-left: 10px;">Copy</button>
-                                </div>
-                            </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="referralCode"><strong>Referral Code:</strong></label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="text" class="form-control" id="referralText" aria-describedby="emailHelp" value="http://localhost:3000/signup?referralCode=<%= (userData?.referralCode)?.toLowerCase() %>" disabled>
+                            <button type="submit" id="copyReferral" class="btn btn-primary" style="margin-left: 10px;">Copy</button>
                         </div>
                     </div>
+
+                    <!-- Add more user details as needed -->
                 </div>
-                
             
-                <div class="orders-container" style="flex: 1; margin-right: 2em;">
-                    <h2>Wallet Transactions</h2>
-                    <div class="order-item">
-                        <div class="order-content">
-                            <div>
-                                <h2 class="order-title">Wallet Balance : ₹<%= walletData?.walletBalance ?? 0%></h2>
-                                <div class="order-info" style="display: flex; justify-content: space-around;">
-                                    <div style="margin-right: 20px;">
-                                        <p><strong>Credits :</strong></p>
-                                        <% walletData?.walletCreditTransaction.forEach(data => { %>
-                                        <p class="wallet-credit"> ₹ <%= data.transactionAmount %> </p>
-                                        <p><%= data?.formattedDate %></p>
-                                        <p><%= data?.message %></p>
-                                        <% }); %>
-                                    </div>
+                <hr>
+            
+                <h1>Wallet Transactions</h1>
                 
-                                    <div>
-                                        <p><strong>Debits :</strong></p>
-                                        <% walletData?.walletDebitTransaction.forEach(data => { %>
-                                        <p class="wallet-debit"> ₹ <%= data.transactionAmount %> </p>
-                                        <p> <%= data?.formattedDate %></p>
-                                        <p> <%= data?.message %></p>
-                                        <% }); %>
-                                    </div>
-                                </div>
+
+                    <div class="credit-transactions">
+                        <h2>Credit Transactions</h2>
+                        <% walletData?.walletCreditTransaction.forEach(data => { %>
+
+                            <div class="transaction">
+                                <div class="amount" style="color: green;">+  ₹ <%= data.transactionAmount %> </div>
+                                <div class="date"><%= data?.formattedDate %></div>
+                                <div class="description"><%= data?.message %></div>
                             </div>
+
+                        <% }); %>
+
+                        
+
+                        <div class="debit-transactions">
+                            <h2>Debit Transactions</h2>
+                            <% walletData?.walletDebitTransaction.forEach(data => { %>
+
+                                <div class="transaction">
+                                    <div class="amount" style="color: red;">- ₹ <%= data.transactionAmount %></div>
+                                    <div class="date"><%= data?.formattedDate %></div>
+                                    <div class="description"><%= data?.message %></div>
+                                </div>
+
+                            <% }); %>
+
                         </div>
-                    </div>
-                </div>
-                
-                
-            
+
+
             </div>
             
             

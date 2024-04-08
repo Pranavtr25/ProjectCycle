@@ -8,6 +8,7 @@ const walletCollection = require("../model/walletModel")
 const cartModel = require("../model/cartModel")
 const wishlistCollection = require("../model/wishlistModel")
 const moment = require("moment")
+require('moment-timezone');
 
 
 const getProfile = async (req,res)=>{
@@ -15,7 +16,7 @@ const getProfile = async (req,res)=>{
         const userData=await userModel.findById({_id:req.session?.userData?._id})
         const walletData= await walletCollection.findOne({userId:req.session?.userData?._id})
         walletData.walletCreditTransaction.forEach(data => {
-            let parsedDate = moment(data.transactionDate)
+            let parsedDate = moment.tz(data.transactionDate, 'Asia/Kolkata');
             let formattedDate = parsedDate.format('YYYY-MM-DD hh:mm:ss A')
             data.formattedDate = formattedDate
         });

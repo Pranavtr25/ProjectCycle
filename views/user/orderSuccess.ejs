@@ -88,6 +88,72 @@
         footer {
             margin-top: auto;
         }
+
+
+/* Responsive styles for mobile */
+    @media (max-width: 767px) {
+        .order-success-container {
+            padding: 10px; /* Reduce padding for more compact layout */
+            max-width: 100%; /* Reduce container width for better alignment */
+            margin: 0 auto; /* Center the container horizontally */
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Stack children vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+        }
+
+        .page-wrapper {
+            max-width: 80%;
+        }
+
+        .thanxContent {
+            padding: 10px; /* Reduce padding for more compact layout */
+        }
+
+        .display-4 {
+            font-size: 2rem; /* Reduce font size for heading */
+        }
+
+        .h5 {
+            font-size: 0.9rem; /* Reduce font size for secondary text */
+        }
+
+        .product-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px; /* Adjust margin for better spacing between products */
+        }
+
+        .product-image {
+            max-width: 100%; /* Ensure images don't overflow container */
+            height: auto;
+            margin-bottom: 5px; /* Adjust margin for better spacing */
+        }
+
+        .product-info,
+        .product-price {
+            text-align: center; /* Center align text for better readability */
+            font-size: 0.8rem; /* Reduce font size for product details */
+        }
+
+        .navigation-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px; /* Adjust margin for better spacing */
+        }
+
+        .navigation-buttons button {
+            width: 100%; /* Make buttons full width on mobile */
+            margin-bottom: 5px; /* Adjust margin for better spacing */
+            font-size: 0.9rem; /* Reduce font size for buttons */
+        }
+    }
+
+
+
+
     </style>
 </head>
 
@@ -129,10 +195,8 @@
                 <button class="button" onclick="window.location.href='/downloadInvoice<%= orderData._id %>'">Download Invoice</button>
             </div>
         </div>
-       
-
-    <%- include('../userPartials/footer') %>
-        
+              
+        <%- include('../userPartials/footer') %>
     </div>
     <!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top">
