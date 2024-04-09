@@ -1,6 +1,13 @@
 <%- include('../userPartials/header') %>
 
+<style>
 
+    .container {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+</style>
 
 
 
@@ -8,9 +15,17 @@
         <div class="container profile-container">
             <hr>
             <h1 class="text-center">Edit Address</h1>
-            <hr>
-           
-            <form id="editAddressValidation" style="padding-left: 20rem; padding-right: 20rem;">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/myAddress">My Address</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Address</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <form id="editAddressValidation">
 
                 <div class="form-group">
                   <input

@@ -1,6 +1,15 @@
 <%- include('../userPartials/header') %>
 
+<style>
 
+    .container {
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        
+    
+</style>
 
 
 
@@ -8,9 +17,17 @@
         <div class="container profile-container">
             <hr>
             <h1 class="text-center">Edit Profile</h1>
-            <hr>
-    
-            <form id="editProfileValidation" style="padding-left: 20rem; padding-right: 20rem;">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+            
+            <form id="editProfileValidation">
                 <div class="form-group">
                   <label for="register-username">Name *</label>
                   <input
@@ -55,37 +72,6 @@
             </form>
     
             <hr>
-    
-            <!-- <div class="row">
-                <div class="col-md-6">
-                    <div class="address-section">
-                        <h2>Address</h2>
-                        <p><strong>Street:</strong> 123 Main St</p>
-                        <p><strong>City:</strong> Cityville</p>
-                        <p><strong>Zip Code:</strong> 12345</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="edit-form" id="editForm">
-                        <h2>Edit Address</h2>
-                        <form id="addressForm">
-                            <div class="form-group">
-                                <label for="street">Street:</label>
-                                <input type="text" class="form-control" id="street" name="street" placeholder="Enter street">
-                            </div>
-                            <div class="form-group">
-                                <label for="city">City:</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
-                            </div>
-                            <div class="form-group">
-                                <label for="zip">Zip Code:</label>
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter zip code">
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div> -->
     
             <hr>
     
