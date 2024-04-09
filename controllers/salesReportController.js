@@ -25,7 +25,7 @@ const getSalesReport = async (req, res) => {
         .populate("userId")
         .skip(skip)
         .limit(limit);
-        
+
       res.render("admin/salesReport", {
         salesData,
         dateValues: null,
@@ -82,9 +82,11 @@ const getSalesReport = async (req, res) => {
   const salesReportFilterCustom = async (req,res)=>{
     try {
       let { startDate, endDate } = req.body;
+      let j= "T23:59:59.999Z"
+      let newEndDate = endDate.concat(j)
       let salesDataFiltered = await orderCollection
         .find({
-          orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
+          orderDate: { $gte: new Date(startDate), $lte: newEndDate },
           orderStatus: "Delivered",
         })
         .populate("userId");

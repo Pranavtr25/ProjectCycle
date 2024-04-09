@@ -196,11 +196,9 @@ const productPriceRangeData = async (req,res)=>{
 const categoryFilterData = async (req,res)=>{
     try {
         console.log(req.params.id)
-        console.log(`[[[[[]]]]]`)
         console.log( req.session.productGTE)
         console.log( req.session.productLTE)
-        console.log(`[[[[[]]]]]`)
-
+        console.log(`------------------------------------------`)
         req.session.categoryFilterName=req.params.id;
         const minVal=await productModel.aggregate([
             {$match:{parentCategory:req.params.id}},
@@ -213,13 +211,15 @@ const categoryFilterData = async (req,res)=>{
             {$group:{_id:null,maxValue:{$max:"$productPrice"}}},
             {$project:{_id:0,maxValue:1}}
         ])
+        console.log(minVal)
+        console.log(maxVal)
         req.session.productGTE =  req.session?.productGTE || minVal[0]?.minValue
         req.session.productLTE =  req.session?.productLTE || maxVal[0]?.maxValue
-        console.log(`[[[[[]]]]]`)
-        console.log( req.session.productGTE)
         console.log( req.session.productLTE)
-        console.log(`[[[[[]]]]]`)
         res.redirect("/userProducts")
+        req.session.productGTE = null;
+        req.session.productLTE = null;
+        req.session.save();
         
     } catch (error) {
         console.error(`error while doing the category filter data \n ${error}`);
