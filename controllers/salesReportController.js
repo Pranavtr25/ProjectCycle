@@ -25,7 +25,7 @@ const getSalesReport = async (req, res) => {
         .populate("userId")
         .skip(skip)
         .limit(limit);
-  
+        
       res.render("admin/salesReport", {
         salesData,
         dateValues: null,
