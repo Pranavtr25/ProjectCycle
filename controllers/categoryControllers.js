@@ -12,7 +12,7 @@ const getAdminCategory = async (req, res) => {
     let skip=(page-1)*limit;
     let categoryData=await categoryModel.find().skip(skip).limit(limit);
     req.session.categoryExists;
-    res.render("admin/Category", {
+    res.render("admin/category", {
       categoryData,
       count,
       categoryExists: req.session.categoryExists
