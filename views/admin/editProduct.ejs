@@ -139,16 +139,24 @@
 
     <%- include('../adminPartials/footer') %>
 
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>-->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script> -->
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
-
-       // Function to delete image and hide delete button
-       function deleteImage(imageNumber, button) {
-            $("#preview" + imageNumber).hide();
-            $(button).hide();
-        }
- 
-
-        $("#editProductValidation").validate({
+            $("#editProductValidation").validate({
             rules:{
                 productName:{
                     required:true,
@@ -156,11 +164,13 @@
                 },
                 productPrice:{
                     required:true,
-                    pattern:/^\d+(-\d+)*$/
+                    pattern:/^\d+(-\d+)*$/,
+                    min : 1
                 },
                 productStock:{
                     required:true,
-                    pattern:/^\d+(-\d+)*$/
+                    pattern:/^\d+(-\d+)*$/,
+                    min : 1
                 },
                 productDescription:{
                     required:true,
@@ -174,8 +184,16 @@
             }
         })
 
+    </script>
 
+    <script>
 
+       // Function to delete image and hide delete button
+       function deleteImage(imageNumber, button) {
+            $("#preview" + imageNumber).hide();
+            $(button).hide();
+        }
+ 
         function displayImage1() {
         const reader = new FileReader();
         reader.onload = () => {

@@ -220,12 +220,12 @@
                 </div>
             
                 <hr>
-            
-                <h1>Wallet Transactions</h1>
                 
-
-                    <div class="credit-transactions">
-                        <h2>Credit Transactions</h2>
+                <h1>Wallet Transactions</h1>
+                <h3 style="text-align: center; color: #70b5fa;">Wallet Balance : ₹ <%= walletData?.walletBalance %></h3>
+                
+                <div class="credit-transactions">
+                    <h2>Credit Transactions</h2>
                         <% walletData?.walletCreditTransaction.forEach(data => { %>
 
                             <div class="transaction">
