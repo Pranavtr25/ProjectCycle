@@ -52,6 +52,7 @@ const getAddProduct= async (req,res)=>{
 const addProductData = async (req, res) => {
 
     try {
+      console.log("req camee")
       let existingProduct = await productModel.findOne({
         productName: { $regex: new RegExp(req.body.productName, "i") },
          productName: req.body.productName,

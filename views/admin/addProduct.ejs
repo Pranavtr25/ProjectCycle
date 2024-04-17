@@ -83,108 +83,144 @@
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="/addProductData" method="POST" enctype="multipart/form-data" id="addProductValidation">
+                           
+                            <form
+                            action="/addProductData"
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="addProductValidation"
+                          >
+                            <div class="modal-body">
+                              <label for="image" class="form-label">product Name</label>
+                              <% if (productAlreadyExists) { %>
+                                <p class="error">Product already exists</p>
+                            <% } %>
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>1. General info</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Product Name</label>
-                                            <% if (productAlreadyExists) { %>
-                                                <p class="error">Product already exists</p>
-                                            <% } %>
-                                            <input type="text" name="productName" placeholder="Type here" class="form-control" required>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label class="form-label">Product Category</label>
-                                            <select name="parentCategory" class="form-select"
-                                                aria-label="Default select example">
-                                                <% categories.forEach((value)=>{ %>
-                                                    <option value="<%=value.categoryName%>">
-                                                        <%= value.categoryName %>
-                                                    </option>
-                                                    <% }) %>
-                                            </select>
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>2. Pricing</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Cost in Rupees</label>
-                                            <input type="number" placeholder="₹00.0" name="productPrice" class="form-control" onclick="stopeT" autofocus="">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>3. Media</h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div id="imageDiv" class="d-flex flex-wrap gap-5"></div>
-                                        <div>
-                                          <label for="image" class="form-label">Image</label>
-                                          <input
-                                            type="file"
-                                            class="form-control"
-                                            id="image"
-                                            name="images"
-                                            accept="image/*"
-                                            multiple
-                                            onchange="loadFile(event)"
-                                            required
-                                          />
-                                        </div>
-                                        <!-- Close button -->
-                                        <button type="button" style="width: fit-content; display: none;" id="cls-btn" class="btn btn-danger mt-2" onclick="clearImageInput()">Clear images</button>
-                                    </div>
-                                </div> <!-- .row end// -->
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>4. Stock</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <input type="number" placeholder="" name="productStock" class="form-control" required autofocus="">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>5. Description</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <input type="text" placeholder="" name="productDescription" class="form-control" required autofocus="">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>6. Highlights</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <input type="text" placeholder="" name="productHighlight" class="form-control" autofocus="">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Close
-                                    </button>
-                                    <button type="submit" id="cropButton" class="btn btn-success">Save changes</button>
+              
+                              <div class="input-group mb-3">
+                           
+                                <input
+                                  name="productName"
+                                  type="name"
+                                  class="form-control"
+                                  placeholder="Product Name"
+                                  required
+                                />
+                              </div>
+              
+              
+                              <div class="input-group mb-3">
+                                <label class="container">
+                                  <span>Select Category</span>
+                                  <select
+                                    name="parentCategory"
+                                    class="form-select"
+                                    aria-label="Default select example"
+                                  >
+                                    <% categories.forEach((value)=>{ %>
+                                    <option value="<%=value.categoryName%>">
+                                      <%= value.categoryName %>
+                                    </option>
+                                    <% }) %>
+                                  </select>
+                                </label>
+                              </div>
+              
+              
+                              <div class="mb-3">
+                                  <div id="imageDiv" class="d-flex flex-wrap gap-5"></div>
+                                  <div>
+                                    <label for="image" class="form-label">Image</label>
+                                    <input
+                                      type="file"
+                                      class="form-control"
+                                      id="image"
+                                      name="images"
+                                      accept="image/*"
+                                      multiple
+                                      onchange="loadFile(event)"
+                                      required
+                                    />
+                                  </div>
+                                  <!-- Close button -->
+                                  <!-- <button type="button" style="width: fit-content; display: none;" id="cls-btn" class="btn btn-danger mt-2" onclick="clearImageInput()">Clear images</button> -->
                                 </div>
+                               
+                               
+              
+              
+                                <label for="image" class="form-label">product Price</label>
+                              <div class="input-group mb-3">
+              
+              
+                                <input
+                                  name="productPrice"
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="Product Price"
+                                  min="100"
+                                  max="10000"
+                                  required
+                                />
+                              </div>
+                              <label for="image" class="form-label">product Stock</label>
+                              <div class="input-group mb-3">
+              
+              
+                                <input
+                                  name="productStock"
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="Product Stock"
+                                  min="0"
+                                  required
+                                />
+                              </div>
+                            </div>
+                               <label for="image" class="form-label">Description</label>
+                              <div class="input-group mb-3">
+              
+              
+                                <input
+                                  name="productDescription"
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Product Description"
+                                 
+                                  required
+                                />
+                              </div>
+                              <label for="image" class="form-label">product Highlight</label>
+                              <div class="input-group mb-3">
+                                <input
+                                  name="productHighlight"
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Product Highlight"
+                          
+                                  required
+                                />
+                              </div>
+                           </div>
+              
+                              
+                            </div>
+              
+              
+              
+              
+                            <div class="modal-footer">
+                              <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                               >
+                                Close
+                              </button>
+                              <button type="submit" id="cropButton" class="btn btn-info">Save changes</button>
+                            </div>
+                          </form>
 
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -246,6 +282,7 @@
                     pattern:/^[a-zA-Z0-9]/
                 }
             }
+
         })
 
     </script>
@@ -258,6 +295,172 @@
         integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+        <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
+    integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+    integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+
+  <script>
+    
+   
+
+
+
+    let crop = [];
+    function loadFile(event) {
+  let imageDiv = document.getElementById("imageDiv");
+  imageDiv.innerHTML = "";
+
+  const maxImages = 3;
+
+  const files = event.target.files;
+  if (files.length > maxImages) {
+    alert(`Please select only up to ${maxImages} images.`);
+    document.getElementById("image").value = ""; // Clear the file input
+    return;
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      // Create an image container
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.alignItems = "center";
+      container.style.marginBottom = "10px";
+
+      // Create an image element and set its source to the selected file
+      const img = new Image();
+      img.src = e.target.result;
+      img.style.width = "100px";
+      img.style.height = "100px";
+      img.style.objectFit = "cover";
+
+      // Append the image to the container
+      container.appendChild(img);
+
+      // Create a delete button for the image
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.className = "btn btn-danger";
+      deleteButton.style.marginLeft = "10px";
+
+      // Add an event listener to delete the image when the button is clicked
+      deleteButton.addEventListener("click", function () {
+        container.remove(); // Remove the image container
+        // Remove the Cropper instance from the array
+        crop.splice(i, 1);
+        // Update the file input value if needed
+        document.getElementById("image").value = "";
+      });
+
+      // Append the delete button to the container
+      container.appendChild(deleteButton);
+
+      // Append the container to the imageDiv
+      imageDiv.appendChild(container);
+
+      // Initialize Cropper.js on the image
+      const cropper = new Cropper(img, {
+        aspectRatio: 3.5 / 4, // Set the aspect ratio as needed
+        viewMode: 1, // Set the view mode as needed
+      });
+
+      // Store the cropper instance in the crop array
+      crop.push(cropper);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // Show clear button
+  document.getElementById("cls-btn").style.display = "block";
+}
+
+  </script>
+
+<script>
+    function clearImageInput() {
+      // Reset the value of the input file element
+      document.getElementById('image').value = '';
+      // Optionally, clear any displayed images
+      document.getElementById('imageDiv').innerHTML = '';
+      document.getElementById("cls-btn").style.display="none"
+     
+
+    }
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+    <!-- <script>
+
+
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#addProductValidation").validate({
+            rules: {
+                productName: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productPrice: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productStock: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    maxlength: 20,
+                },
+
+            },
+            messages: {
+                productName: {
+                    required: "Please enter your product name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+                productPrice: {
+                    required: "Please enter your price",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                },
+                productStock: {
+                    required: "Please enter your last name",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                   
+                },
+
+            },
+        });
+
+    </script>. -->
+
+
+<!-- 
     <script>
 
 
@@ -336,6 +539,8 @@
         function (e) {
 
             e.preventDefault()
+
+            alert("dfdfd")
           // Get the cropped canvas data
           const canvas = cropper.getCroppedCanvas();
 
@@ -391,4 +596,4 @@
      
 
     }
-  </script>
+  </script> -->
